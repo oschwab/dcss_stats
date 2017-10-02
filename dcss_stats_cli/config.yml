@@ -1,0 +1,5 @@
+
+## Runtime configuration for the dcss_stats application.
+##
+core:
+  logging: DEBUG
