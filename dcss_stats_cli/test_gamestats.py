@@ -92,13 +92,13 @@ def _args(argv=None):
     """
     parser = ArgumentParser()
     parser.add_argument("-c", "--config", action="append",
-            help="config file [etc/config.yml]")
+            help="config file [./config.yml]")
     parser.add_argument("-v", "--version", action="version",
             version="dcss-stats {:s}".format(__version__),
             help="print version and exit")
     parser.add_argument("-w", "--warn", default="INFO",
             help="logger warning level [WARN]")
-    parser.add_argument("-p", "--path", type=str, help="DCSS path", default=path.dirname(path.abspath(__file__)))
+    parser.add_argument("-p", "--path", type=str, help="DCSS path")
 
     args = parser.parse_args(argv)
     if not args.config:
@@ -113,17 +113,25 @@ def main(argv=None):
     Main function (heh :)
     """
     args = _args(argv)
+    #args.morgue_path = join(args.path, 'morgue')
     f = open("dcss_stats.log", "a", encoding="utf-8")
     logger.start(args.warn,f)
     logger.info("version {}".format(__version__))
     config.load(args.config)
     config.core.logging = args.warn
-    # TODO add morgue path in config
-    #configuration.morgue_path = join(crawl_path, 'morgue')
+
+    if (args.path is None) and (config.path is None):
+        msg="DCSS Path must be provided, either by command line (-p) either by editing config.yml"
+        print(msg)
+        logger.error(msg)
+        return 2
+
+    if (config.path is None):
+        config.path = args.path
+    config.morgue_path = join(config.path, 'morgue')
 
     try:
-        args.morgue_path = join(args.path, 'morgue')
-        FileOuput(args)
+        FileOuput(config)
     except RuntimeError as err:
         logger.critical(err)
         return 1

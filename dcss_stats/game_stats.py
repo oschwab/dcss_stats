@@ -4,6 +4,7 @@ import datetime
 from enum import Enum, auto
 from os import listdir
 from os.path import isfile, join
+from .core import logger
 
 
 
@@ -81,7 +82,7 @@ class GameStats:
         self.Stats = []
 
         for morgue in self.MorgueFiles:
-            print(morgue)
+            logger.info("Analyzing " + morgue)
             with open(join(self.MorguePath, morgue)) as file:
                 content = file.readlines()
 
