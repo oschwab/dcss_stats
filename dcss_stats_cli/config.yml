@@ -4,3 +4,7 @@
 core:
   logging: DEBUG
 path: K:\Perso\dcss
+# possible values : text,console
+output: console
+
+scoreevol: False
