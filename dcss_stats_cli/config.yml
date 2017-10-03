@@ -4,7 +4,7 @@
 core:
   logging: DEBUG
 path: K:\Perso\dcss
-# possible values : text,console
-output: console
+# possible values : text,console,markdown
+output: markdown
 
 scoreevol: False
