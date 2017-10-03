@@ -55,13 +55,13 @@ def write_percharacter_stats(output,gamestats, list_character):
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
-            s = s + "{} ({} times)\n".format(k[0], k[1])
+            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
         output.write_line("Killed most by : {}".format(s))
 
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.dun_lev, lcstat)
         s = "\n"
         for k in sorted_simplestat:
-            s = s + "{} ({} times)\n".format(k[0], k[1])
+            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
         output.write_line("Killed most in : {}".format(s))
 
         output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
@@ -78,7 +78,7 @@ def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
-            s = s + "{} ({} times)\n".format(k[0], k[1])
+            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
         output.write_line("Killed most by : {}".format(s))
 
 
