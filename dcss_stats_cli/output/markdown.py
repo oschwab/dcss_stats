@@ -8,7 +8,7 @@ class MarkDown():
             os.remove(self.filename)
 
     def write_header(self,msg,level=1):
-        output=level * "#" + msg
+        output=level * "# " + msg
         self.write_line(output)
     def write_footer(self, msg):
         return msg
@@ -36,6 +36,7 @@ class MarkDown():
         """
 
         mdmsg = msg.replace("\n", "\n\n")
-
+        if not mdmsg[:-1]=="\n":
+            mdmsg=mdmsg+"\n"
         with open(self.filename, 'a') as x_file:
             x_file.write(mdmsg + "\n")

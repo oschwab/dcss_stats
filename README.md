@@ -11,7 +11,7 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
 
 ## Command line interface
 
-TODO
+Documentation to do
 
 
 ## Roadmap
