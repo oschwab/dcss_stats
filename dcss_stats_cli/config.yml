@@ -6,5 +6,5 @@ core:
 path: K:\Perso\dcss
 # possible values : text,console,markdown
 output: markdown
-
+path: C:\Temp
 scoreevol: False

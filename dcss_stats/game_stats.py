@@ -28,7 +28,9 @@ class StatColumn(Enum):
     self_kill = auto()
     dungeon_level = auto()
     score = auto()
-
+    escaped = auto()
+    orb=auto()
+    runes=auto()
 
 class GameStats:
     """
@@ -48,7 +50,7 @@ class GameStats:
     'hp': '30',
     'surname': 'the Chiller',
     'duration': '00:11:56',
-    'dun+lev': 'Dungeon:1',
+    'dun_lev': 'Dungeon:1',
     'level': '4',
     'turns': '2120',
     'god': 'None',
@@ -57,7 +59,11 @@ class GameStats:
     'species': 'Merfolk',
     'version': '0.18.1 (tiles)',
     'death_cause': 'giant frog',
+    'self_kill' : False,
     'dungeon_level': '1',
+    'escaped' : True,
+    'orb ': True,
+    'runes' : 3,
     'score': 63}
     """
 
@@ -164,10 +170,15 @@ i       From the stat structure in param , get the count of each possible value 
             stat = self.Stats
         simplestat = {}
         for s in stat:
-            if s[column] in simplestat:
-                simplestat[s[column]] += 1
-            else:
-                simplestat[s[column]] = 1
+            try:
+                if s[column] in simplestat:
+                    simplestat[s[column]] += 1
+                else:
+                    simplestat[s[column]] = 1
+            except KeyError:
+                # hope that filename has been filled, otherwise expect a complete crash ....
+                logger.error("Cannot find stat {} in file {}".format(column,s[StatColumn.filename]))
+
         if retsorted:
             sorted_simplestat = sorted(simplestat.items(), key=operator.itemgetter(1), reverse=True)
         else:
@@ -236,6 +247,23 @@ i       From the stat structure in param , get the count of each possible value 
         :param morgue: the morgue file
         :return: the information contained in the morge file
         """
+
+
+        """
+        Example :
+        
+        65618 XXXX the Impaler (level 15, -2/184 HPs)
+             Began as a Merfolk Monk on Oct 10, 2014.
+             Was the Champion of Fedhas.
+             Slain by a frost giant
+             ... wielding a +0 battleaxe of freezing
+              (6 damage)
+             ... in an ice cave.
+             The game lasted 02:28:38 (35567 turns).
+        
+        
+        """
+
         stat = {}
         line = 0
         if self.get_typegame(morgue[line])=="Sprint":
@@ -261,7 +289,12 @@ i       From the stat structure in param , get the count of each possible value 
         curline = morgue[line]
         linetab = curline.strip().split(' ')
         stat[StatColumn.species] = linetab[3]
-        stat[StatColumn.background] = linetab[4]
+        if stat[StatColumn.species] == "High":
+        # High Elf
+            stat[StatColumn.species] = stat[StatColumn.species] +" "+ linetab[4]
+            stat[StatColumn.background] = linetab[5]
+        else:
+            stat[StatColumn.background] = linetab[4]
         dateidx=len(linetab)-9
         if len(linetab) > 9:
             stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
@@ -276,9 +309,9 @@ i       From the stat structure in param , get the count of each possible value 
             if curline.find('Was an') > -1:
                 stat[StatColumn.religion_rank] = curline[curline.find('Was an') + 6: curline.find(' of ')]
             elif curline.find('Was the') > -1:
-                stat[StatColumn.religion_rank] = curline[curline.find('Was the') + 6: curline.find(' of ')]
+                stat[StatColumn.religion_rank] = curline[curline.find('Was the') + 7: curline.find(' of ')]
             else:
-                stat[StatColumn.religion_rank] = curline[curline.find('Was a') + 6: curline.find(' of ')]
+                stat[StatColumn.religion_rank] = curline[curline.find('Was a') + 5: curline.find(' of ')]
 
             stat[StatColumn.god] = curline[curline.find(' of ') + 4:curline.find('.')]
         else:
@@ -289,13 +322,21 @@ i       From the stat structure in param , get the count of each possible value 
         # Cause of death
         line = line + 1
         curline = morgue[line]
+        stat[StatColumn.escaped] = False
+        stat[StatColumn.orb] = False
+        stat[StatColumn.runes] = 0
+
 
         if morgue[line + 1].strip().startswith("... invoked"):
             linetab = morgue[line + 1].strip().split(' ')
             stat[StatColumn.death_cause] = ' '.join(linetab[4:])
+        elif curline.strip().lower().startswith('escaped'):
+            stat[StatColumn.death_cause] = 'Not Dead'
+            stat[StatColumn.escaped] = True
+            stat[StatColumn.orb] = True
         else:
-            # write_file(curline)
-            linetab = curline.strip().split(' ')
+
+            linetab = curline.strip().lower().split(' ')
             if linetab[len(linetab) - 1].endswith(")"):
                 del linetab[len(linetab) - 1]
                 del linetab[len(linetab) - 1]
@@ -304,12 +345,19 @@ i       From the stat structure in param , get the count of each possible value 
                 del linetab[1]
                 del linetab[1]
 
-            if linetab[1] == "with":
+            if linetab[0]== "blown":
+                del linetab[1]
+            if linetab[1] == "with"  :
                 while linetab[1] != "by":
                     del linetab[1]
 
             if linetab[0].startswith('...'):
                 stat[StatColumn.death_cause] = 'Not Dead'
+            elif linetab[0].lower()=='quit':
+                stat[StatColumn.death_cause] = 'Quit'
+            elif linetab[0].lower()=='got' or linetab[0].lower()=='safely':
+                stat[StatColumn.death_cause] = 'Not Dead'
+                stat[StatColumn.escaped] = True
             else:
                 if linetab[1] == "by" or linetab[1] == "to":
                     if linetab[2] == "a" or linetab[2] == "an":
@@ -326,21 +374,44 @@ i       From the stat structure in param , get the count of each possible value 
                 if stat[StatColumn.death_cause].find('\'s ghost') > -1:
                     stat[StatColumn.death_cause] = "Player" + stat[StatColumn.death_cause][
                                                               stat[StatColumn.death_cause].find('\'s ghost'):]
-
-        # dungeon & level
-        while not (morgue[line].strip().startswith('... on level') or morgue[line].strip().startswith('... in a')):
-            line = line + 1
-
-        linetab = morgue[line].strip().split(' ')
-        if len(linetab) > 4:
-            stat[StatColumn.dungeon_level] = linetab[3]
-            stat[StatColumn.dungeon] = linetab[6]
+        if stat[StatColumn.escaped]:
+             stat[StatColumn.dungeon_level] = "n/a"
+             stat[StatColumn.dungeon] = "n/a"
         else:
-            stat[StatColumn.dungeon] = linetab[3]
-            stat[StatColumn.dungeon_level] = '(/na)'
+            if stat[StatColumn.death_cause] != 'Quit':
+                # dungeon & level
+                while not (morgue[line].strip().lower().startswith('... on level') or morgue[line].strip().lower().startswith('... in a')):
+                    line = line + 1
 
-        if stat[StatColumn.dungeon].endswith('.'):
-            stat[StatColumn.dungeon] = stat[StatColumn.dungeon][:-1]
+            linetab = morgue[line].strip().lower().split(' ')
+
+            if stat[StatColumn.death_cause] == 'Quit':
+                if linetab[5]=="treasure":
+                    # Quit on Treasure trove
+                    stat[StatColumn.dungeon_level] = "n/a"
+                    stat[StatColumn.dungeon] = "Treasure trove"
+                elif linetab[5]=="ecumenical":
+                    # Quit on Treasure trove
+                    stat[StatColumn.dungeon_level] = "n/a"
+                    stat[StatColumn.dungeon] = "Ecumenical temple"
+                else:
+                    stat[StatColumn.dungeon_level] = linetab[5]
+                    stat[StatColumn.dungeon] = linetab[8]
+            if len(linetab) > 4:
+                if linetab[3]=="ice":
+                # in an ice cave
+                    stat[StatColumn.dungeon_level] ="n/a"
+                    stat[StatColumn.dungeon] = "ice cave"
+                else:
+                    stat[StatColumn.dungeon_level] = linetab[3]
+                    stat[StatColumn.dungeon] = linetab[6]
+            else:
+                stat[StatColumn.dungeon] = linetab[3]
+                stat[StatColumn.dungeon_level] = 'n/a'
+
+            if stat[StatColumn.dungeon].endswith('.'):
+                stat[StatColumn.dungeon] = stat[StatColumn.dungeon][:-1]
+
         stat[StatColumn.dun_lev] = stat[StatColumn.dungeon] + ":" + stat[StatColumn.dungeon_level]
         # Game duration
         line = 4
