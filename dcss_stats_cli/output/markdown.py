@@ -8,7 +8,7 @@ class MarkDown():
             os.remove(self.filename)
 
     def write_header(self,msg,level=1):
-        output=level * "# " + msg
+        output=level * "#" + " " + msg
         self.write_line(output)
     def write_footer(self, msg):
         return msg

@@ -3,7 +3,7 @@ import csv
 
 def generate_report(output,config):
 
-
+    # TODO move these 2 lines elsewhere
     gamestats = GameStats(config)
 
     gamestats.analyze()
@@ -15,19 +15,22 @@ def generate_report(output,config):
     output.write_line("Best game : {}".format(gamestats.get_best_game()))
     output.write_line("Average Score : {}".format(gamestats.get_averagescore()))
 
-    output.write_header("Ranking by Death Cause " ,2)
+    output.write_header("Ranking by outcome" ,2)
     stat = gamestats.get_stat_basic(StatColumn.death_cause)
     s = "\n"
     for k in stat:
-        s = s + "{} ({} times)\n".format(k[0], k[1])
-    output.write_line("Killed most by : {}".format(s))
+        s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
+    output.write_line(output.get_bold("End game by :"))
+    output.write_line("{}".format(s))
 
     output.write_header("Ranking by Dungeon level ", 2)
     stat = gamestats.get_stat_basic(StatColumn.dun_lev)
     s = "\n"
+
     for k in stat:
-        s = s + "{} ({} times)\n".format(k[0], k[1])
-    output.write_line("Killed most in : {}".format(s))
+        s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
+    output.write_line(output.get_bold("End game in :"))
+    output.write_line("{}".format(s))
 
 
     list_character = gamestats.get_character_list()
@@ -49,38 +52,44 @@ def write_percharacter_stats(output,gamestats, list_character):
     output.write_header("PER CHARACTER STATISTIC",2)
     for lc in list_character:
         lcstat = gamestats.get_char_filtered_stat(lc)
+        output.write_header("Statistic for : {}".format(lc),3)
         output.write_separator()
-        output.write_line("Statistic for : {}".format(lc))
+        output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
+        output.write_line("Average Score : {}".format(gamestats.get_averagescore(lcstat)))
         output.write_line("Number of games played : {}".format(gamestats.get_number_of_game(lcstat)))
+        output.write_separator()
+
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
-        output.write_line("Killed most by : {}".format(s))
+        output.write_line(output.get_bold("End game by :"))
+        output.write_line("{}".format(s))
 
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.dun_lev, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
-        output.write_line("Killed most in : {}".format(s))
+        output.write_line(output.get_bold("End game in:"))
+        output.write_line("{}".format(s))
 
-        output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
-        output.write_line("Average Score : {}".format(gamestats.get_averagescore(lcstat)))
+
 
 
 def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
     output.write_header("PER DUNGEON STATISTIC",2)
     for lc in list_dungeonlevel:
         lcstat = gamestats.get_filtered_stat(lc,StatColumn.dun_lev)
+
         output.write_separator()
         output.write_line("Statistic for : {}".format(lc))
         output.write_line("Number of games played : {}".format(gamestats.get_number_of_game(lcstat)))
+        output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
+        output.write_line("Average Score : {}".format(gamestats.get_averagescore(lcstat)))
+        output.write_separator()
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
-        output.write_line("Killed most by : {}".format(s))
+        output.write_line("End game by : {}".format(s))
 
-
-        output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
-        output.write_line("Average Score : {}".format(gamestats.get_averagescore(lcstat)))
