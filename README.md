@@ -37,7 +37,7 @@ For each morgue file : (unrealistic example)
  -   'filename': 'morgue-Awutz-20160912-104224.txt',
  -   'species': 'Merfolk',
  -   'version': '0.18.1 (tiles)',
- -   'death_cause': 'giant frog',
+ -   'endgame_cause': 'giant frog',
  -   'self_kill' : False,
  -   'dungeon_level': '1',
  -   'escaped' : True,

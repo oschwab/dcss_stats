@@ -16,7 +16,7 @@ def generate_report(output,config):
     output.write_line("Average Score : {}".format(gamestats.get_averagescore()))
 
     output.write_header("Ranking by outcome" ,2)
-    stat = gamestats.get_stat_basic(StatColumn.death_cause)
+    stat = gamestats.get_stat_basic(StatColumn.endgame_cause)
     s = "\n"
     for k in stat:
         s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
@@ -59,7 +59,7 @@ def write_percharacter_stats(output,gamestats, list_character):
         output.write_line("Number of games played : {}".format(gamestats.get_number_of_game(lcstat)))
         output.write_separator()
 
-        sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
+        sorted_simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
@@ -87,7 +87,7 @@ def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
         output.write_line("Best game : {}".format(gamestats.get_best_game(lcstat)))
         output.write_line("Average Score : {}".format(gamestats.get_averagescore(lcstat)))
         output.write_separator()
-        sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
+        sorted_simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])

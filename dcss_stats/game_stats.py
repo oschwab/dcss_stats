@@ -24,7 +24,7 @@ class StatColumn(Enum):
     filename = auto()
     species = auto()
     version = auto()
-    death_cause = auto()
+    endgame_cause = auto()
     self_kill = auto()
     dungeon_level = auto()
     score = auto()
@@ -58,7 +58,7 @@ class GameStats:
     'filename': 'morgue-Awutz-20160912-104224.txt',
     'species': 'Merfolk',
     'version': '0.18.1 (tiles)',
-    'death_cause': 'giant frog',
+    'endgame_cause': 'giant frog',
     'self_kill' : False,
     'dungeon_level': '1',
     'escaped' : True,
@@ -86,7 +86,7 @@ class GameStats:
         Analyze morgue files in :MorguePath and fill :Stats
         """
         self.Stats = []
-
+        i=0
         for morgue in self.MorgueFiles:
             logger.info("Analyzing " + morgue)
             with open(join(self.MorguePath, morgue)) as file:
@@ -96,6 +96,8 @@ class GameStats:
             if len(stat)>0:
                 stat[StatColumn.filename] = morgue
                 self.Stats.append(stat)
+            i=i+1
+            print("{}/{}".format(i,len(self.MorgueFiles)))
 
     def get_number_of_game(self, stat=None):
         """
@@ -329,21 +331,30 @@ i       From the stat structure in param , get the count of each possible value 
 
         if morgue[line + 1].strip().startswith("... invoked"):
             linetab = morgue[line + 1].strip().split(' ')
-            stat[StatColumn.death_cause] = ' '.join(linetab[4:])
+            stat[StatColumn.endgame_cause] = ' '.join(linetab[4:])
         elif curline.strip().lower().startswith('escaped'):
-            stat[StatColumn.death_cause] = 'Not Dead'
+            stat[StatColumn.endgame_cause] = 'Escaped'
             stat[StatColumn.escaped] = True
             stat[StatColumn.orb] = True
+        elif curline.strip().lower().startswith('asphyxiated'):
+            stat[StatColumn.endgame_cause] = 'Asphyxiated'
+        elif curline.strip().lower().startswith('drowned'):
+            stat[StatColumn.endgame_cause] = 'Drowned'
         else:
 
             linetab = curline.strip().lower().split(' ')
+
+            if len(linetab) <=1:
+                line=line+1
+                linetab = morgue[line].strip().lower().split(' ')
+
             if linetab[len(linetab) - 1].endswith(")"):
                 del linetab[len(linetab) - 1]
                 del linetab[len(linetab) - 1]
 
-            if linetab[2] == "afar":
-                del linetab[1]
-                del linetab[1]
+                if linetab[2] == "afar":
+                    del linetab[1]
+                    del linetab[1]
 
             if linetab[0]== "blown":
                 del linetab[1]
@@ -351,63 +362,68 @@ i       From the stat structure in param , get the count of each possible value 
                 while linetab[1] != "by":
                     del linetab[1]
 
-            if linetab[0].startswith('...'):
-                stat[StatColumn.death_cause] = 'Not Dead'
-            elif linetab[0].lower()=='quit':
-                stat[StatColumn.death_cause] = 'Quit'
+            if linetab[0].lower()=='quit':
+                stat[StatColumn.endgame_cause] = 'Quit'
             elif linetab[0].lower()=='got' or linetab[0].lower()=='safely':
-                stat[StatColumn.death_cause] = 'Not Dead'
+                stat[StatColumn.endgame_cause] = 'Escaped'
                 stat[StatColumn.escaped] = True
             else:
-                if linetab[1] == "by" or linetab[1] == "to":
+                #  Impaled on a porcupine's spines (12 damage)
+                if linetab[1] in ["by","to","on"]:
                     if linetab[2] == "a" or linetab[2] == "an":
-                        stat[StatColumn.death_cause] = ' '.join(linetab[3:])
+                        stat[StatColumn.endgame_cause] = ' '.join(linetab[3:])
                     else:
-                        stat[StatColumn.death_cause] = ' '.join(linetab[2:])
+                        stat[StatColumn.endgame_cause] = ' '.join(linetab[2:])
 
                 if linetab[1] == "themself":
-                    stat[StatColumn.death_cause] = 'Himself (' + ' '.join(linetab[4:]) + ')'
+                    stat[StatColumn.endgame_cause] = 'Himself (' + ' '.join(linetab[4:]) + ')'
                     stat[StatColumn.self_kill] = True
                 else:
                     stat[StatColumn.self_kill] = False
 
-                if stat[StatColumn.death_cause].find('\'s ghost') > -1:
-                    stat[StatColumn.death_cause] = "Player" + stat[StatColumn.death_cause][
-                                                              stat[StatColumn.death_cause].find('\'s ghost'):]
+                if stat[StatColumn.endgame_cause].find('\'s ghost') > -1:
+                    stat[StatColumn.endgame_cause] = "Player" + stat[StatColumn.endgame_cause][
+                                                                stat[StatColumn.endgame_cause].find('\'s ghost'):]
         if stat[StatColumn.escaped]:
              stat[StatColumn.dungeon_level] = "n/a"
              stat[StatColumn.dungeon] = "n/a"
         else:
-            if stat[StatColumn.death_cause] != 'Quit':
+            if stat[StatColumn.endgame_cause] != 'Quit':
                 # dungeon & level
-                while not (morgue[line].strip().lower().startswith('... on level') or morgue[line].strip().lower().startswith('... in a')):
+                while not (morgue[line].strip().lower().startswith('... on level') or morgue[line].strip().lower().startswith('... in ')):
                     line = line + 1
 
             linetab = morgue[line].strip().lower().split(' ')
 
-            if stat[StatColumn.death_cause] == 'Quit':
-                if linetab[5]=="treasure":
-                    # Quit on Treasure trove
-                    stat[StatColumn.dungeon_level] = "n/a"
-                    stat[StatColumn.dungeon] = "Treasure trove"
-                elif linetab[5]=="ecumenical":
-                    # Quit on Treasure trove
-                    stat[StatColumn.dungeon_level] = "n/a"
-                    stat[StatColumn.dungeon] = "Ecumenical temple"
+            if stat[StatColumn.endgame_cause] == 'Quit':
+
+                if linetab[3] == "on":
+                # Quit the game on level 2 of the dungeon
+                     stat[StatColumn.dungeon_level] = linetab[5]
+                     stat[StatColumn.dungeon] = linetab[8]
+
                 else:
-                    stat[StatColumn.dungeon_level] = linetab[5]
-                    stat[StatColumn.dungeon] = linetab[8]
-            if len(linetab) > 4:
-                if linetab[3]=="ice":
-                # in an ice cave
-                    stat[StatColumn.dungeon_level] ="n/a"
-                    stat[StatColumn.dungeon] = "ice cave"
-                else:
-                    stat[StatColumn.dungeon_level] = linetab[3]
-                    stat[StatColumn.dungeon] = linetab[6]
+                # Quit the game in the Ecumenical Temple.
+                # Quit the game in a sewer.
+                    stat[StatColumn.dungeon_level] = "n/a"
+                    stat[StatColumn.dungeon] = ' ' .join(linetab [5:])
+
             else:
-                stat[StatColumn.dungeon] = linetab[3]
-                stat[StatColumn.dungeon_level] = 'n/a'
+                if len(linetab) > 4:
+                    if linetab[3]=="ice":
+                    # in an ice cave
+                        stat[StatColumn.dungeon_level] ="n/a"
+                        stat[StatColumn.dungeon] = "ice cave"
+                    elif linetab[3] == "ecumenical":
+                        # Quit on Treasure trove
+                        stat[StatColumn.dungeon_level] = "n/a"
+                        stat[StatColumn.dungeon] = "Ecumenical temple"
+                    else:
+                        stat[StatColumn.dungeon_level] = linetab[3]
+                        stat[StatColumn.dungeon] = linetab[6]
+                else:
+                    stat[StatColumn.dungeon] = linetab[3]
+                    stat[StatColumn.dungeon_level] = 'n/a'
 
             if stat[StatColumn.dungeon].endswith('.'):
                 stat[StatColumn.dungeon] = stat[StatColumn.dungeon][:-1]

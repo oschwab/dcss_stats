@@ -49,7 +49,7 @@ def write_percharacter_stats(gamestats, list_character):
         write_file("-" * 50)
         write_file("Statistic for : {}".format(lc))
         write_file("Number of games played : {}".format(gamestats.get_number_of_game(lcstat)))
-        sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
+        sorted_simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + "{} ({} times)\n".format(k[0], k[1])
@@ -76,7 +76,7 @@ def write_perdungeonlevel_stats(gamestats, list_dungeonlevel):
         write_file("-" * 50)
         write_file("Statistic for : {}".format(lc))
         write_file("Number of games played : {}".format(gamestats.get_number_of_game(lcstat)))
-        sorted_simplestat = gamestats.get_stat_basic(StatColumn.death_cause, lcstat)
+        sorted_simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
         s = "\n"
         for k in sorted_simplestat:
             s = s + "{} ({} times)\n".format(k[0], k[1])
@@ -156,7 +156,7 @@ def FileOuput(config):
     write_file("-" * 50)
     write_file("-" * 50)
 
-    stat = gamestats.get_stat_basic(StatColumn.death_cause)
+    stat = gamestats.get_stat_basic(StatColumn.endgame_cause)
     s = "\n"
     for k in stat:
         s = s + "{} ({} times)\n".format(k[0], k[1])
