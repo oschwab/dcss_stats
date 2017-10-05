@@ -33,7 +33,8 @@ def main(argv=None):
 
     if (config.path is None):
         config.path = args.path
-    config.morgue_path = join(config.path, 'morgue')
+    if (not "morgue_path" in config.keys()   ):
+        config.morgue_path = join(config.path, 'morgue')
     if (config.output is None):
         config.output = args.output
     if config.scoreevol is None:

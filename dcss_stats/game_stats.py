@@ -101,8 +101,12 @@ class GameStats:
             ## control check
             if stat[StatColumn.dungeon_level] == "n/a:n/a":
                 logger.error("invalid dungeon+level in " + stat[StatColumn.filename])
-            if stat[StatColumn.endgame_cause] == "":
+            if stat[StatColumn.endgame_cause].find("cyclops") > 0 or  stat[StatColumn.endgame_cause].startswith("level"):
                 logger.error("invalid endgame_cause in " + stat[StatColumn.filename])
+
+
+
+
             i=i+1
             print("{}/{}".format(i,len(self.MorgueFiles)))
 
@@ -168,6 +172,19 @@ class GameStats:
                 list_stat.append(s[statcolumn])
 
         return list_stat
+
+    def exclude_result(self,column,stat):
+        """
+        verify if value for this column must be excluded from stats
+        :param column: the stat column
+        :param value:  the value to verify
+        :return: True if value must be excluded
+        """
+        result = False
+        if column==StatColumn.dun_lev and stat[StatColumn.escaped] == True:
+            result =True
+        return result
+
     def get_stat_basic(self, column, stat=None, retsorted=True):
         """
 i       From the stat structure in param , get the count of each possible value of *column*
@@ -179,14 +196,15 @@ i       From the stat structure in param , get the count of each possible value 
             stat = self.Stats
         simplestat = {}
         for s in stat:
-            try:
-                if s[column] in simplestat:
-                    simplestat[s[column]] += 1
-                else:
-                    simplestat[s[column]] = 1
-            except KeyError:
-                # hope that filename has been filled, otherwise expect a complete crash ....
-                logger.error("Cannot find stat {} in file {}".format(column,s[StatColumn.filename]))
+            if not self.exclude_result(column,s):
+                try:
+                    if s[column] in simplestat:
+                        simplestat[s[column]] += 1
+                    else:
+                        simplestat[s[column]] = 1
+                except KeyError:
+                    # hope that filename has been filled, otherwise expect a complete crash ....
+                    logger.error("Cannot find stat {} in file {}".format(column,s[StatColumn.filename]))
 
         if retsorted:
             sorted_simplestat = sorted(simplestat.items(), key=operator.itemgetter(1), reverse=True)
@@ -298,7 +316,7 @@ i       From the stat structure in param , get the count of each possible value 
         curline = morgue[line]
         linetab = curline.strip().split(' ')
         stat[StatColumn.species] = linetab[3]
-        if stat[StatColumn.species] == "High":
+        if stat[StatColumn.species] in ["High","Dark","Deep","Hill","Vine"]:
         # High Elf
             stat[StatColumn.species] = stat[StatColumn.species] +" "+ linetab[4]
             stat[StatColumn.background] = linetab[5]
@@ -314,7 +332,7 @@ i       From the stat structure in param , get the count of each possible value 
         # Find religion
         line = line + 1
         curline = morgue[line].strip()
-        if curline.startswith('Was'):
+        if curline.startswith('Was') and not curline.startswith('Was drained') :
             if curline.find('Was an') > -1:
                 stat[StatColumn.religion_rank] = curline[curline.find('Was an') + 6: curline.find(' of ')]
             elif curline.find('Was the') > -1:
@@ -327,6 +345,8 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.religion_rank] = 'None'
             stat[StatColumn.god] = 'None'
             line = line - 1
+
+
         #
         # Cause of end game
         #
@@ -336,7 +356,6 @@ i       From the stat structure in param , get the count of each possible value 
         stat[StatColumn.escaped] = False
         stat[StatColumn.orb] = False
         stat[StatColumn.runes] = 0
-
 
         if morgue[line + 1].strip().startswith("... invoked"):
             linetab = morgue[line + 1].strip().split(' ')
@@ -353,6 +372,8 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.endgame_cause] = 'Asphyxiated'
         elif curline.strip().lower().startswith('drowned'):
             stat[StatColumn.endgame_cause] = 'Drowned'
+        elif curline.strip().lower().startswith('was drained'):
+            stat[StatColumn.endgame_cause] = 'Drained'
         else:
 
             linetab = curline.strip().lower().split(' ')
@@ -397,6 +418,30 @@ i       From the stat structure in param , get the count of each possible value 
                 if stat[StatColumn.endgame_cause].find('\'s ghost') > -1:
                     stat[StatColumn.endgame_cause] = "Player" + stat[StatColumn.endgame_cause][
                                                                 stat[StatColumn.endgame_cause].find('\'s ghost'):]
+
+        # Check if we must rectify monster effect
+        quote = stat[StatColumn.endgame_cause].find("'")
+        if  quote > 0 :
+            # stupid creature's poison
+            # cacas' flame
+            stat[StatColumn.endgame_cause] = stat[StatColumn.endgame_cause][:quote]
+        thrown = stat[StatColumn.endgame_cause].find("thrown")
+        if  thrown > 0 :
+            # stone thrown by a kobold
+            pos=stat[StatColumn.endgame_cause].find("by an ")
+            if pos==-1:
+                pos = stat[StatColumn.endgame_cause].find("by a ")
+                if pos >=0:
+                    pos = pos + len("by a ")
+            else:
+                pos = pos + len("by an ")
+
+            if pos>=0 :
+                stat[StatColumn.endgame_cause] = stat[StatColumn.endgame_cause][pos:]
+
+
+
+
         #
         # Dungeon & Level
         #

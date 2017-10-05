@@ -51,6 +51,8 @@ For each morgue file : (unrealistic example)
 
 - Handling escape without orb ,quit
 - Escape stats, rune stats
+- Filter stat from command line (ex : limit results to a character)
+- Limit results (verbose mode , top 10 , ??)
 - Better text and mardown presentation (tables ?)
 - HTML output with links to DCSS tiles 
 - GUI (which toolkit ?)

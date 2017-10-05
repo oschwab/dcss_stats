@@ -7,5 +7,6 @@ path: K:\Perso\dcss
 # possible values : text,console,markdown
 output: markdown
 path: C:\Temp\braveplatypus2
+#morgue_path: C:\Temp\braveplatypus2\morgue\_tt
 #path: K:\Perso\dcss
-scoreevol: False
+scoreevol: True
