@@ -96,6 +96,13 @@ class GameStats:
             if len(stat)>0:
                 stat[StatColumn.filename] = morgue
                 self.Stats.append(stat)
+
+
+            ## control check
+            if stat[StatColumn.dungeon_level] == "n/a:n/a":
+                logger.error("invalid dungeon+level in " + stat[StatColumn.filename])
+            if stat[StatColumn.endgame_cause] == "":
+                logger.error("invalid endgame_cause in " + stat[StatColumn.filename])
             i=i+1
             print("{}/{}".format(i,len(self.MorgueFiles)))
 
@@ -320,8 +327,10 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.religion_rank] = 'None'
             stat[StatColumn.god] = 'None'
             line = line - 1
+        #
+        # Cause of end game
+        #
 
-        # Cause of death
         line = line + 1
         curline = morgue[line]
         stat[StatColumn.escaped] = False
@@ -331,7 +340,11 @@ i       From the stat structure in param , get the count of each possible value 
 
         if morgue[line + 1].strip().startswith("... invoked"):
             linetab = morgue[line + 1].strip().split(' ')
-            stat[StatColumn.endgame_cause] = ' '.join(linetab[4:])
+            if linetab[3] in ["a","an"]:
+                stat[StatColumn.endgame_cause] = ' '.join(linetab[4:])
+            else:
+                stat[StatColumn.endgame_cause] = ' '.join(linetab[3:])
+
         elif curline.strip().lower().startswith('escaped'):
             stat[StatColumn.endgame_cause] = 'Escaped'
             stat[StatColumn.escaped] = True
@@ -384,6 +397,10 @@ i       From the stat structure in param , get the count of each possible value 
                 if stat[StatColumn.endgame_cause].find('\'s ghost') > -1:
                     stat[StatColumn.endgame_cause] = "Player" + stat[StatColumn.endgame_cause][
                                                                 stat[StatColumn.endgame_cause].find('\'s ghost'):]
+        #
+        # Dungeon & Level
+        #
+
         if stat[StatColumn.escaped]:
              stat[StatColumn.dungeon_level] = "n/a"
              stat[StatColumn.dungeon] = "n/a"
@@ -437,6 +454,8 @@ i       From the stat structure in param , get the count of each possible value 
         linetab = morgue[line].strip().split(' ')
         stat[StatColumn.duration] = linetab[3]
         stat[StatColumn.turns] = linetab[4][1:]
+
+
 
         return stat
 
