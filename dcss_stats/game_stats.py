@@ -94,15 +94,15 @@ class GameStats:
 
             stat = self.get_information(content)
             if len(stat)>0:
+                # Not a Sprint game, for ex.
                 stat[StatColumn.filename] = morgue
                 self.Stats.append(stat)
 
-
-            ## control check
-            if stat[StatColumn.dungeon_level] == "n/a:n/a":
-                logger.error("invalid dungeon+level in " + stat[StatColumn.filename])
-            if stat[StatColumn.endgame_cause].find("cyclops") > 0 or  stat[StatColumn.endgame_cause].startswith("level"):
-                logger.error("invalid endgame_cause in " + stat[StatColumn.filename])
+                ## control check
+                if stat[StatColumn.dungeon_level] == "n/a:n/a":
+                    logger.error("invalid dungeon+level in " + stat[StatColumn.filename])
+                if stat[StatColumn.endgame_cause].find("cyclops") > 0 or  stat[StatColumn.endgame_cause].startswith("level"):
+                    logger.error("invalid endgame_cause in " + stat[StatColumn.filename])
 
 
 
@@ -209,7 +209,7 @@ i       From the stat structure in param , get the count of each possible value 
         if retsorted:
             sorted_simplestat = sorted(simplestat.items(), key=operator.itemgetter(1), reverse=True)
         else:
-            sorted_simplestat = simplestat.items()
+            sorted_simplestat = simplestat
 
         return sorted_simplestat
 

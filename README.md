@@ -54,6 +54,7 @@ For each morgue file : (unrealistic example)
 - Filter stat from command line (ex : limit results to a character)
 - Limit results (verbose mode , top 10 , ??)
 - Better text and mardown presentation (tables ?)
+- Dungeon sprints ?
 - HTML output with links to DCSS tiles 
 - GUI (which toolkit ?)
 
