@@ -17,7 +17,7 @@ class StatColumn(Enum):
     surname = auto()
     duration = auto()
     dun_lev = auto()
-    level = auto()
+    xp_level = auto()
     turns = auto()
     god = auto()
     religion_rank = auto()
@@ -51,7 +51,7 @@ class GameStats:
     'surname': 'the Chiller',
     'duration': '00:11:56',
     'dun_lev': 'Dungeon:1',
-    'level': '4',
+    'xp_level': '4',
     'turns': '2120',
     'god': 'None',
     'religion_rank': 'None',
@@ -306,7 +306,7 @@ i       From the stat structure in param , get the count of each possible value 
         stat[StatColumn.score] = int(curline[:curline.find(' ')])
         stat[StatColumn.name] = curline[curline.find(' ') + 1:curline.find('the') - 1]
         stat[StatColumn.surname] = curline[curline.find('the '):curline.find('(') - 1]
-        stat[StatColumn.level] = curline[curline.find('level ') + 6:curline.find(',')]
+        stat[StatColumn.xp_level] = curline[curline.find('level ') + 6:curline.find(',')]
         stat[StatColumn.hp] = curline[curline.find('/') + 1:curline.find('HP') - 1]
 
         # Race & Background
