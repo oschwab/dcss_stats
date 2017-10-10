@@ -132,16 +132,19 @@ class GameStats:
                 filtstat.append(s)
         return filtstat
 
-    def get_filtered_stat(self, value,column=StatColumn.dungeon_level, ):
+    def get_filtered_stat(self, stat,value,column=StatColumn.dungeon_level ):
         """
              returns a stat structure filtered for column
         :param column: the column to filter
         :param value:  the value of the column
         :return: stat structure
         """
-        filtstat = []
-        for s in self.Stats:
 
+        if stat is None:
+            stat = self.Stats
+
+        filtstat = []
+        for s in stat:
             if s[column] == value:
                 filtstat.append(s)
         return filtstat
@@ -451,7 +454,7 @@ i       From the stat structure in param , get the count of each possible value 
              stat[StatColumn.dungeon] = "n/a"
         else:
             if stat[StatColumn.endgame_cause] != 'Quit':
-                # dungeon & level
+                # dungeon & _level
                 while not (morgue[line].strip().lower().startswith('... on level') or morgue[line].strip().lower().startswith('... in ')):
                     line = line + 1
 
@@ -460,7 +463,7 @@ i       From the stat structure in param , get the count of each possible value 
             if stat[StatColumn.endgame_cause] == 'Quit':
 
                 if linetab[3] == "on":
-                # Quit the game on level 2 of the dungeon
+                # Quit the game on xp_level 2 of the dungeon
                      stat[StatColumn.dungeon_level] = linetab[5]
                      stat[StatColumn.dungeon] = linetab[8]
 

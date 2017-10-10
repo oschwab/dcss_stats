@@ -49,7 +49,7 @@ For each morgue file : (unrealistic example)
 
 ## Roadmap (priority desc)
 
-- Handling escape without orb ,quit
+- Handling quit
 - Escape stats, rune stats
 - Filter stat from command line (ex : limit results to a character)
 - Limit results (verbose mode , top 10 , ??)
