@@ -21,3 +21,8 @@ class Minimal:
 
     def write_line(self,msg):
         pass
+    def complete(self):
+        pass
+
+    def start(self):
+        pass

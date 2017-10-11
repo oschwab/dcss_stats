@@ -4,8 +4,8 @@
 core:
   logging: DEBUG
 path: K:\Perso\dcss
-# possible values : text,console,markdown
-output: markdown
+# possible values : text,console,markdown,html
+output: html
 #path: K:\Perso\dcss
 path: C:\Temp\braveplatypus2
 #morgue_path: C:\Temp\braveplatypus2\morgue\_tt

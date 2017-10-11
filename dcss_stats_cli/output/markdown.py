@@ -40,3 +40,10 @@ class MarkDown():
             mdmsg=mdmsg+"\n"
         with open(self.filename, 'a') as x_file:
             x_file.write(mdmsg + "\n")
+
+
+    def complete(self):
+        pass
+
+    def start(self):
+        pass

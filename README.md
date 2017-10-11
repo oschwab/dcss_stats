@@ -11,12 +11,22 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
 
 ## Command line interface
 
+`python dcss_stats_cli\dcss_stats_cli.py`
+
+
  - -c --config : set the path for the config file (default ./config.yml)    
  - -v --version : print version and exit
  - -w --warn : logger warning level (default INFO)
  - -p --path : DCSS installation path
  - -o --output : output  : text/console/markdown ( default text)
  - -s --scorevol : generate CSV with score evolution values (default False)
+
+### Configuration file
+
+by default dcss_stats_cli\config.yml
+
+
+
 
 ## Information retrieved from parsing
 

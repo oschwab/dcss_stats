@@ -43,3 +43,10 @@ class Text():
 
         with open(self.filename, 'a') as x_file:
             x_file.write(msg + "\n")
+
+    def complete(self):
+        pass
+
+
+    def start(self):
+        pass

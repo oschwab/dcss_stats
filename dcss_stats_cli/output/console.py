@@ -31,3 +31,9 @@ class Console():
 
     def write_line(self,msg):
         print(msg)
+
+    def completed(self):
+        pass
+
+    def start(self):
+        pass
