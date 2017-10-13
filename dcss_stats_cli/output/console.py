@@ -2,6 +2,10 @@ import os
 
 class Console():
 
+    def write_title(self,title):
+        self.write_header(title,1)
+
+
     def write_header(self,msg,level=1):
         output=msg
         if level==1:
