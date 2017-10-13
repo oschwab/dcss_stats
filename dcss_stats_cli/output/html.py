@@ -3,7 +3,7 @@ import output.lib.html
 
 class Html():
     filename = ""
-    h = output.lib.html.HTML()
+    body = None
     output=[]
     def __init__(self,filename="game_stats.html"):
         self.filename = filename
@@ -14,30 +14,35 @@ class Html():
     def write_header(self,msg,level=1):
         output=msg
         if level==1:
-            output=  self.h.h1(msg)
+            self.body.h1(msg)
         if level==2:
-            output = self.h.h2(msg)
+            self.body.h2(msg)
         if level==3:
-            output = self.h.h3(msg)
+            self.body.h3(msg)
 
-        self.write_line(output)
+        #self.write_line(output)
+
     def write_footer(self, msg):
         return msg
 
     def get_bold(self,msg):
-        return self.h.b(msg)
+        h2 = output.lib.html.HTML()
+        return h2.b(msg)
 
     def get_italic(self,msg):
-        return self.h.i(msg)
+        h2 = output.lib.html.HTML()
+        return h2.i(msg)
 
     def get_underlined(self,msg):
-        return self.h.u(msg)
+        h2 = output.lib.html.HTML()
+        return h2.u(msg)
 
     def get_hyperlink(self,link,text):
-        return self.h.link( text ,link)
+        h2 = output.lib.html.HTML()
+        return h2.link( text ,link)
 
     def write_separator(self):
-        self.write_line(self.h.hr())
+        self.body.hr()
 
     def write_line(self,msg):
         """
@@ -45,18 +50,21 @@ class Html():
         :param data:
         :return:
         """
+        self.body += str(msg)
+        self.body.br()
 
-
-
-        self.output.append(str(msg))
-        self.output.append(str(self.h.br()))
 
 
     def complete(self):
         # Write the array to disk
         file = open(self.filename, 'w')
-        file.write(os.linesep.join(self.output))
+
+        f = str(self.html)
+        file.write(f)
         file.close()
 
     def start(self):
-        self.h = self.h.head(self.h.link('rel="stylesheet" href="style.css"'))
+        self.html = output.lib.html.HTML('html')
+        self.html.head(' ').link(rel="stylesheet", href="style.css")
+        self.body = self.html.body(' ')
+

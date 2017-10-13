@@ -59,6 +59,7 @@ For each morgue file : (unrealistic example)
 
 ## Roadmap (priority desc)
 
+- Sorting dungeons display (d:1 to d:15 , then lair, ...)
 - Handling quit
 - Escape stats, rune stats
 - Filter stat from command line (ex : limit results to a character)

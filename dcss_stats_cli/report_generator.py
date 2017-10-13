@@ -21,9 +21,6 @@ def generate_report(output,config):
     output.write_header("Ranking by outcome" ,2)
     stat = gamestats.get_stat_basic(StatColumn.endgame_cause)
 
-    # s = "\n"
-    # for k in stat:
-    #     s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
     output.write_line(output.get_bold("End game by :"))
     for k in stat:
         output.write_line(("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1]))
@@ -31,9 +28,6 @@ def generate_report(output,config):
     output.write_header("Ranking by Dungeon level ", 2)
     stat = gamestats.get_stat_basic(StatColumn.dun_lev)
 
-    #s = "\n"
-    #for k in stat:
-    #    s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
     output.write_line(output.get_bold("End game in :"))
     for k in stat:
         output.write_line(("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1]))
@@ -65,18 +59,14 @@ def write_percharacter_stats(output,gamestats, list_character):
         write_general_stats(output,gamestats,lcstat)
 
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
-        s = "\n"
-        for k in sorted_simplestat:
-            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
         output.write_line(output.get_bold("End game by :"))
-        output.write_line("{}".format(s))
+        for k in sorted_simplestat:
+            output.write_line(("{} ({} time" + "s" * int(k[1] > 1) + ")\n").format(k[0], k[1]))
 
         sorted_simplestat = gamestats.get_stat_basic(StatColumn.dun_lev, lcstat)
-        s = "\n"
+        output.write_line(output.get_bold("End game in :"))
         for k in sorted_simplestat:
-            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
-        output.write_line(output.get_bold("End game in:"))
-        output.write_line("{}".format(s))
+            output.write_line(("{} ({} time" + "s" * int(k[1] > 1) + ")\n").format(k[0], k[1]))
 
 
 
@@ -98,11 +88,9 @@ def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
 
         simplestat = gamestats.get_stat_basic(StatColumn.endgame_cause, lcstat)
 
-
-        s = "\n"
+        output.write_line(output.get_bold("End game by :"))
         for k in simplestat:
-            s = s + ("{} ({} time" + "s"*int(k[1]>1) + ")\n").format(k[0], k[1])
-        output.write_line("End game by : {}".format(s))
+            output.write_line(("{} ({} time" + "s" * int(k[1] > 1) + ")\n").format(k[0], k[1]))
 
 def write_general_stats(output,gamestats,lcstat):
     output.write_separator()

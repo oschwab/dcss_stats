@@ -6,8 +6,7 @@ core:
 path: K:\Perso\dcss
 # possible values : text,console,markdown,html
 output: html
-#path: K:\Perso\dcss
-path: C:\Temp\braveplatypus2
+path: K:\Perso\dcss
+#path: C:\Temp\braveplatypus2
 #morgue_path: C:\Temp\braveplatypus2\morgue\_tt
-
-scoreevol: True
+scoreevol: False
