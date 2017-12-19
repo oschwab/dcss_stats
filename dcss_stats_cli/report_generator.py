@@ -1,6 +1,8 @@
 from dcss_stats.game_stats import GameStats,StatColumn
 from dcss_stats import __version__
 from datetime import datetime
+from collections import OrderedDict
+
 import csv
 import operator
 
@@ -40,19 +42,35 @@ def generate_report(output,config):
 
     output.complete()
 
-    
-    
+
+    if config.globalstat==True:
+        with open('global.csv', 'w') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,lineterminator="\n")
+
+            header_written = False
+            for s in gamestats.Stats:
+                if not header_written:
+                    writer.writerow(s.keys())
+                    header_written = True
+
+
+                writer.writerow(s.values())
+
+
     if config.scoreevol==True:    
         scorevol = gamestats.get_scoreevolution(type='day')
         with open('scorevol.csv', 'w') as csvfile:
             writer = csv.writer(csvfile, delimiter=' ',
-                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL,lineterminator="\n")
             writer.writerow(["Date","Score"])
             writer.writerows(scorevol)
 
 def write_percharacter_stats(output,gamestats, list_character):
 
     output.write_header("Per character statistic",2)
+    # TODO Sort by name / games / orb ..?
+    sorted_listchar = list_character.sort()
+
     for lc in list_character:
         lcstat = gamestats.get_char_filtered_stat(lc)
         output.write_header("Statistic for : {}".format(lc),3)
@@ -74,7 +92,7 @@ def write_percharacter_stats(output,gamestats, list_character):
 def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
     output.write_header("Per dungeon statistic",2)
 
-
+    # TODO Sort by name / games / orb ..?
     list_dungeonlevel.sort()
 
     for lc in list_dungeonlevel:
