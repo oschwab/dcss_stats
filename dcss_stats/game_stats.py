@@ -358,6 +358,7 @@ i       From the stat structure in param , get the count of each possible value 
         curline = morgue[line]
         stat[StatColumn.escaped] = False
         stat[StatColumn.orb] = False
+        stat[StatColumn.self_kill] = False
         stat[StatColumn.runes] = 0
 
         if morgue[line + 1].strip().startswith("... invoked"):
