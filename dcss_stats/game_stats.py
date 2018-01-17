@@ -326,7 +326,7 @@ i       From the stat structure in param , get the count of each possible value 
         else:
             stat[StatColumn.background] = linetab[4]
         dateidx=len(linetab)-9
-        if len(linetab) > 9:
+        if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
             stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
         # Date
         stat[StatColumn.datestart] = self.convert_date(linetab[7+dateidx] , linetab[6+dateidx] ,linetab[8+dateidx])
