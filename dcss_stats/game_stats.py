@@ -12,6 +12,7 @@ class StatColumn(Enum):
     dungeon = 0
     background = auto()
     datestart= auto()
+    datedeath=auto()
     name = auto()
     hp = auto()
     surname = auto()
@@ -92,7 +93,7 @@ class GameStats:
             with open(join(self.MorguePath, morgue)) as file:
                 content = file.readlines()
 
-            stat = self.get_information(content)
+            stat = self.get_information(content,morgue)
             if len(stat)>0:
                 # Not a Sprint game, for ex.
                 stat[StatColumn.filename] = morgue
@@ -271,10 +272,11 @@ i       From the stat structure in param , get the count of each possible value 
 
 
 
-    def get_information(self, morgue):
+    def get_information(self, morgue,morguefile):
         """
         Create an entry for the stat structure
-        :param morgue: the morgue file
+        :param morgue: the morgue file (array of string)
+        :param morguefile : the morgue file name
         :return: the information contained in the morge file
         """
 
@@ -311,6 +313,11 @@ i       From the stat structure in param , get the count of each possible value 
         stat[StatColumn.surname] = curline[curline.find('the '):curline.find('(') - 1]
         stat[StatColumn.xp_level] = curline[curline.find('level ') + 6:curline.find(',')]
         stat[StatColumn.hp] = curline[curline.find('/') + 1:curline.find('HP') - 1]
+        datestr=morguefile[len(morguefile)-len("YYYYMMDD-HHMMSS")-4:-4]
+        stat[StatColumn.datedeath] = datetime.datetime.strptime(datestr,"%Y%m%d-%H%M%S")
+
+
+
 
         # Race & Background
         # example string :
