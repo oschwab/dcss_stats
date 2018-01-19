@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="dcss_stats",
-    version="0.0.1",
+    version="0.0.6",
     url="https://github.com/oschwab/dcss_stats",
 
     author="OSchwab",

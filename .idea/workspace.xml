@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="383173d2-35c2-441f-b5af-8a2dee079cb5" name="Default" comment="">
+    <list default="true" id="383173d2-35c2-441f-b5af-8a2dee079cb5" name="Default" comment="- fixed bug on some game where background was duplicated ( Hill Orc Fighter Fighter)">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dcss_stats_cli/dcss_stats.log" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dcss_stats/game_stats.py" afterPath="$PROJECT_DIR$/dcss_stats/game_stats.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dcss_stats_cli/dcss_stats.log" afterPath="$PROJECT_DIR$/dcss_stats_cli/dcss_stats.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
     </list>
     <ignored path="dcss_stats_cli/game_stats.txt" />
     <ignored path="dcss_stats_cli/scorevol.csv" />
@@ -17,12 +17,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="game_stats.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="game_stats.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="366" column="20" lean-forward="false" selection-start-line="366" selection-start-column="20" selection-end-line="366" selection-end-column="20" />
-              <folding />
+            <state relative-caret-position="0">
+              <caret line="535" column="18" lean-forward="false" selection-start-line="535" selection-start-column="18" selection-end-line="535" selection-end-column="18" />
+              <folding>
+                <element signature="e#1#16#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -40,8 +42,8 @@
       <file leaf-file-name="report_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dcss_stats_cli/report_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" column="60" lean-forward="false" selection-start-line="39" selection-start-column="60" selection-end-line="39" selection-end-column="60" />
+            <state relative-caret-position="136">
+              <caret line="38" column="40" lean-forward="false" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -75,17 +77,37 @@
         <entry file="file://$PROJECT_DIR$/dcss_stats_cli/config.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="8" column="19" lean-forward="true" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+              <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dcss_stats/__init__.py">
+      <file leaf-file-name="README.rst" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="20" lean-forward="false" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="18" lean-forward="false" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -108,6 +130,7 @@
       <find>erica</find>
       <find>text-align</find>
       <find>def write_title(self, title):</find>
+      <find>csv</find>
     </findStrings>
     <replaceStrings>
       <replace>output.write_line</replace>
@@ -123,7 +146,6 @@
         <option value="$PROJECT_DIR$/test/test_game_stats.bat" />
         <option value="$PROJECT_DIR$/deploy.py" />
         <option value="$PROJECT_DIR$/src/dcss_stats/cli.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/dcss_stats/core/__init__.py" />
         <option value="$PROJECT_DIR$/dcss_stats/core/_config.py" />
         <option value="$PROJECT_DIR$/config.yml" />
@@ -148,6 +170,7 @@
         <option value="$PROJECT_DIR$/dcss_stats/__init__.py" />
         <option value="$PROJECT_DIR$/dcss_stats_cli/report_generator.py" />
         <option value="$PROJECT_DIR$/dcss_stats/game_stats.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
@@ -191,7 +214,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -199,32 +221,11 @@
               <item name="dcss_stats" type="b2602c69:ProjectViewProjectNode" />
               <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="dcss_stats" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dcss_stats" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dcss_stats" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-              <item name="dcss_stats_cli" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dcss_stats" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dcss_stats" type="462c0819:PsiDirectoryNode" />
-              <item name="dcss_stats_cli" type="462c0819:PsiDirectoryNode" />
-              <item name="output" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,7 +513,28 @@
       <option name="project" value="LOCAL" />
       <updated>1513692761178</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="- fixed bug on some games where self killed was not filled">
+      <created>1516179064445</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1516179064445</updated>
+    </task>
+    <task id="LOCAL-00023" summary="- fixed bug on some games where self killed was not filled">
+      <created>1516181791528</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1516181791528</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added Death Date information">
+      <created>1516276556695</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1516276556695</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -527,11 +549,11 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20095949" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14712153" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49462366" sideWeight="0.52132195" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24623656" sideWeight="0.47867805" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24623656" sideWeight="0.47867805" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -580,6 +602,32 @@
       </list>
     </option>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -604,7 +652,9 @@
     <MESSAGE value="HTML Output - step 2" />
     <MESSAGE value="HTML Output - end" />
     <MESSAGE value="- Sort report by character+class&#10;- Added option for global CSV file generation" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Sort report by character+class&#10;- Added option for global CSV file generation" />
+    <MESSAGE value="- fixed bug on some games where self killed was not filled" />
+    <MESSAGE value="Added Death Date information" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Death Date information" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -615,7 +665,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="89" />
+      <option name="time" value="94" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -625,8 +675,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/deploy.py" />
-    <entry file="file://$PROJECT_DIR$/requirements.txt" />
     <entry file="file://$PROJECT_DIR$/test/dcss_stats/test_cli.py" />
     <entry file="file://$PROJECT_DIR$/src/dcss_stats/api/cmd1.py" />
     <entry file="file://$PROJECT_DIR$/src/dcss_stats/api/__init__.py" />
@@ -642,20 +690,6 @@
     <entry file="file://$PROJECT_DIR$/src/dcss_stats/__version__.py" />
     <entry file="file://$PROJECT_DIR$/src/__init__.py" />
     <entry file="file://$PROJECT_DIR$/src/dcss_stats/cli.py" />
-    <entry file="file://$PROJECT_DIR$/README.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Tools/Python36/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -688,14 +722,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dcss_stats_cli/dcss_stats.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="546">
-          <caret line="8744" column="52" lean-forward="true" selection-start-line="8744" selection-start-column="52" selection-end-line="8744" selection-end-column="52" />
-        </state>
-      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="224">
           <caret line="202" column="96" lean-forward="false" selection-start-line="202" selection-start-column="96" selection-end-line="202" selection-end-column="96" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="LogFileEditorProvider">
+        <state relative-caret-position="546">
+          <caret line="8744" column="52" lean-forward="true" selection-start-line="8744" selection-start-column="52" selection-end-line="8744" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -834,22 +868,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="20" lean-forward="false" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="19" lean-forward="true" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dcss_stats_cli/global.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -857,12 +875,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/report_generator.py">
+    <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="60" lean-forward="false" selection-start-line="39" selection-start-column="60" selection-end-line="39" selection-end-column="60" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="535" column="18" lean-forward="false" selection-start-line="535" selection-start-column="18" selection-end-line="535" selection-end-column="18" />
           <folding>
-            <element signature="e#0#54#0" expanded="true" />
+            <element signature="e#1#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -875,10 +916,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
+    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/report_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="366" column="20" lean-forward="false" selection-start-line="366" selection-start-column="20" selection-end-line="366" selection-end-column="20" />
+        <state relative-caret-position="136">
+          <caret line="38" column="40" lean-forward="false" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcss_stats/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="20" lean-forward="false" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="18" lean-forward="false" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
           <folding />
         </state>
       </provider>
