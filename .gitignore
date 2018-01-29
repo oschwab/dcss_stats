@@ -42,3 +42,4 @@ dcss_stats_cli/scorevol.csv
 *.bak
 dcss_stats_cli/game_stats.html
 dcss_stats_cli/tmp.py
+dcss_stats_cli/global.csv
