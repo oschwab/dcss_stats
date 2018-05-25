@@ -6,12 +6,8 @@ from collections import OrderedDict
 import csv
 import operator
 
-def generate_report(output,config):
+def generate_report(output,config,gamestats):
 
-    # TODO move these 2 lines elsewhere
-    gamestats = GameStats(config)
-
-    gamestats.analyze()
 
     output.start()
     output.write_title("DUNGEON CRAWL STONE SOUP STATISTICS")

@@ -4,6 +4,8 @@ import datetime
 from enum import Enum, auto
 from os import listdir
 from os.path import isfile, join
+
+from dcss_stats.core.dcss_data import get_short_background, get_short_specie
 from .core import logger
 
 
@@ -11,6 +13,7 @@ from .core import logger
 class StatColumn(Enum):
     dungeon = 0
     background = auto()
+    sbackground=auto()
     datestart= auto()
     datedeath=auto()
     name = auto()
@@ -24,6 +27,7 @@ class StatColumn(Enum):
     religion_rank = auto()
     filename = auto()
     species = auto()
+    sspecies = auto()
     version = auto()
     endgame_cause = auto()
     self_kill = auto()
@@ -32,6 +36,46 @@ class StatColumn(Enum):
     escaped = auto()
     orb=auto()
     runes=auto()
+
+
+
+
+
+    def __str__(self):
+       labels=  {
+           self.dungeon: 'Dungeon',
+           self.background: 'Background',
+           self.sbackground: 'Bgrnd',
+           self.datestart: 'Start of game',
+           self.datedeath: 'Death date',
+           self.name: 'Name',
+           self.hp: 'Hp',
+           self.surname: 'Surname',
+           self.duration: 'Duration',
+           self.dun_lev: 'Dun lev',
+           self.xp_level: 'Xp level',
+           self.turns: 'Turns',
+           self.god: 'God',
+           self.religion_rank: 'Religion rank',
+           self.filename: 'Filename',
+           self.species: 'Species',
+           self.sspecies: 'Spec.',
+           self.version: 'Version',
+           self.endgame_cause: 'Endgame cause',
+           self.self_kill: 'Self kill',
+           self.dungeon_level: 'Dungeon level',
+           self.score: 'Score',
+           self.escaped: 'Escaped',
+           self.orb: 'Orb',
+           self.runes: 'Runes'
+                   }
+       if self in labels.keys():
+           return(labels[self])
+       else:
+           return("")
+
+
+
 
 class GameStats:
     """
@@ -335,6 +379,11 @@ i       From the stat structure in param , get the count of each possible value 
         dateidx=len(linetab)-9
         if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
             stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
+
+        stat[StatColumn.sbackground] = get_short_background(stat[StatColumn.background])
+        stat[StatColumn.sspecies] = get_short_specie(stat[StatColumn.species])
+
+
         # Date
         stat[StatColumn.datestart] = self.convert_date(linetab[7+dateidx] , linetab[6+dateidx] ,linetab[8+dateidx])
 

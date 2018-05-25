@@ -1,6 +1,6 @@
 from os import  listdir,getcwd
 from os.path import join,isdir
-from argparse import ArgumentParser
+from argparse import ArgumentParser,SUPPRESS
 from dcss_stats.core import logger,config
 from dcss_stats import __version__
 from report_generator import generate_report
@@ -9,6 +9,9 @@ import output
 
 # this is the package we are inspecting -- for example 'email' from stdlib
 import email
+
+from dcss_stats.game_stats import GameStats
+from StatsShell import StatsShell
 
 package = output
 
@@ -40,29 +43,38 @@ def main(argv=None):
     if config.scoreevol is None:
         config.scoreevol=args.scoreevol
 
+    config.interactive=args.interactive
+
+    gamestats = GameStats(config)
+    gamestats.analyze()
+
+    if (config.interactive=="False"):
+
+        output_module = __import__("output."+config.output, fromlist="dummy")
+        for name, obj in inspect.getmembers(output_module):
+            if inspect.isclass(obj):
+                output_object = obj()
+                break
 
 
-    output_module = __import__("output."+config.output, fromlist="dummy")
-    for name, obj in inspect.getmembers(output_module):
-        if inspect.isclass(obj):
-            output_object = obj()
-            break
+        # looks like shit, but don't complain ! http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html#eafp-vs-lbyl
+        try:
+            output_object.filename = config.outputfilename
+        except:
+            pass
 
 
-    # looks like shit, but don't complain ! http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html#eafp-vs-lbyl
-    try:
-        output_object.filename = config.outputfilename
-    except:
-        pass
 
-
-    try:
-        generate_report(output_object,config)
-    except RuntimeError as err:
-        logger.critical(err)
-        return 1
-    logger.debug("successful completion")
-    return 0
+        try:
+            generate_report(output_object,config,gamestats)
+        except RuntimeError as err:
+            logger.critical(err)
+            return 1
+        logger.debug("successful completion")
+        return 0
+    else:
+        shell=StatsShell(config,gamestats)
+        shell.start()
 
 
 def _args(argv=None):
@@ -77,6 +89,8 @@ def _args(argv=None):
     parser.add_argument("-w", "--warn", default="INFO",
             help="logger warning level [WARN]")
     parser.add_argument("-p", "--path", type=str, help="DCSS path")
+    parser.add_argument("-i", "--interactive", action="store_false", default="False",
+                        help="interactive mode [False] (output is ignored)")
     parser.add_argument("-o", "--output", default="text",
                         help="output [text]")
     parser.add_argument("-s", "--scorevol", default="False",
