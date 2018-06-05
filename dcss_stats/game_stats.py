@@ -36,6 +36,7 @@ class StatColumn(Enum):
     escaped = auto()
     orb=auto()
     runes=auto()
+    game_number=auto()
 
 
 
@@ -154,6 +155,12 @@ class GameStats:
 
             i=i+1
             print("{}/{}".format(i,len(self.MorgueFiles)))
+        # Finally, sort and number the games
+        self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
+        i=0
+        for s in self.Stats:
+            i=i+1
+            s[StatColumn.game_number] = i
 
     def get_number_of_game(self, stat=None):
         """
@@ -193,6 +200,20 @@ class GameStats:
             if s[column] == value:
                 filtstat.append(s)
         return filtstat
+
+
+    def get_top(self,stat=None,top=10):
+        if stat is None:
+            stat = self.Stats
+        topstat=[]
+        cpt = 0
+        for s in stat:
+            cpt = cpt + 1
+            topstat.append(s)
+            if cpt == top:
+                break
+        return topstat
+
 
     def get_character_list(self):
 
