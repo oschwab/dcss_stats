@@ -561,6 +561,9 @@ i       From the stat structure in param , get the count of each possible value 
                         # Quit on Treasure trove
                         stat[StatColumn.dungeon_level] = "n/a"
                         stat[StatColumn.dungeon] = "Ecumenical temple"
+                    elif linetab[6] == "realm":
+                        stat[StatColumn.dungeon_level] = linetab[3]
+                        stat[StatColumn.dungeon] = "zot"
                     else:
                         stat[StatColumn.dungeon_level] = linetab[3]
                         stat[StatColumn.dungeon] = linetab[6]
@@ -571,7 +574,9 @@ i       From the stat structure in param , get the count of each possible value 
             if stat[StatColumn.dungeon].endswith('.'):
                 stat[StatColumn.dungeon] = stat[StatColumn.dungeon][:-1]
 
-        stat[StatColumn.dun_lev] = stat[StatColumn.dungeon] + ":" + stat[StatColumn.dungeon_level]
+        stat[StatColumn.dun_lev] = stat[StatColumn.dungeon]
+        if stat[StatColumn.dungeon_level]!="n/a":
+            stat[StatColumn.dun_lev] = stat[StatColumn.dun_lev] +":" + stat[StatColumn.dungeon_level]
         # Game duration
         line = 4
         while not morgue[line].strip().startswith('The game lasted'):
