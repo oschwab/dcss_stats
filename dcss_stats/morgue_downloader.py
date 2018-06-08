@@ -2,6 +2,9 @@ from enum import Enum, auto
 import urllib.request
 import os
 
+from dcss_stats.core.eventhook import EventHook
+
+
 class Server(Enum):
     cdo = 0
     cao = auto()
@@ -33,14 +36,22 @@ class DCSSDownloader:
     user=''
     path=''
 
+    onChange = EventHook()
+    onCompleted = EventHook()
+
+    nb_files=0
+    nb_downloaded=0
+
+
     def __init__(self,server,user,path):
         self.server = server
         self.user=user
         self.path=path
-        pass
+
+
 
     def download(self):
-        user = "lepoulpe303"
+        user = self.user
         url = "https://" + self.server.to_address() + "/morgue/" + user + "/"
         print("URL=" + url)
         response = urllib.request.urlopen(url)
@@ -61,10 +72,10 @@ class DCSSDownloader:
             for filename in filenames:
                 if filename in files:
                     files.remove(filename)
+        self.nb_files = len(files)
+        print(str(self.nb_files)+ " files to download")
 
-        print(str(len(files) )+ " files to download")
-
-
+        self.nb_downloaded = 0
         for file_to_dl in files:
             url = "https://" + self.server.to_address() + "/morgue/" + user + "/" + file_to_dl
             print("URL=" + url)
@@ -73,11 +84,13 @@ class DCSSDownloader:
             text = data.decode('utf-8')
             with open(os.path.join(self.path,file_to_dl), "w", encoding='utf-8') as text_file:
                 text_file.write(text)
+            self.nb_downloaded = self.nb_downloaded+1
+            self.onChange.fire()
+        self.onCompleted.fire()
 
 
-
-if __name__ == '__main__':
-    d = DCSSDownloader(server=Server.cpo,user='lepoulpe303',path='K:\Perso\dcss\morgue')
-    d.download()
+# if __name__ == '__main__':
+#     d = DCSSDownloader(server=Server.cpo,user='lepoulpe303',path='K:\Perso\dcss\morgue')
+#     d.download()
 
 
