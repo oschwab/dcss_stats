@@ -44,3 +44,4 @@ dcss_stats_cli/game_stats.html
 dcss_stats_cli/tmp.py
 dcss_stats_cli/global.csv
 dcss_stats_cli/global.xls
+dcss_stats_gui/global.csv
