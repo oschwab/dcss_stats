@@ -36,6 +36,8 @@ class Application:
 
         #3: Create the widget using a master as parent
         self.mainwindow = builder.get_object('mainframe', master)
+        self.mainwindow.pack(expand=True, fill="both")
+
         root.geometry('1024x768')
         #root.state('zoomed')
         root.resizable(True, True)
@@ -150,4 +152,5 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.title("DCSS Stats")
     app = Application(root)
+
     root.mainloop()

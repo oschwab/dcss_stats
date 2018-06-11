@@ -5,36 +5,32 @@
       <property name="column">0</property>
       <property name="propagate">True</property>
       <property name="row">0</property>
-      <property name="sticky">nsew</property>
       <rows>
         <row id="0">
-          <property name="minsize">28</property>
           <property name="pad">0</property>
-          <property name="weight">1</property>
+          <property name="weight">0</property>
         </row>
         <row id="1">
-          <property name="minsize">0</property>
           <property name="pad">0</property>
           <property name="weight">6</property>
         </row>
         <row id="2">
-          <property name="minsize">28</property>
-          <property name="weight">1</property>
+          <property name="weight">0</property>
         </row>
         <row id="3">
-          <property name="minsize">28</property>
-          <property name="weight">1</property>
+          <property name="weight">0</property>
         </row>
       </rows>
       <columns>
         <column id="0">
           <property name="pad">0</property>
-          <property name="weight">3</property>
+          <property name="weight">1</property>
         </column>
       </columns>
     </layout>
     <child>
       <object class="ttk.Labelframe" id="FilterFrame">
+        <property name="height">40</property>
         <property name="takefocus">false</property>
         <property name="text" translatable="yes">Filter:</property>
         <layout>
@@ -87,7 +83,8 @@
     </child>
     <child>
       <object class="ttk.Frame" id="TvFrame">
-        <property name="relief">groove</property>
+        <property name="padding">4</property>
+        <property name="relief">ridge</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
@@ -103,12 +100,16 @@
           </rows>
           <columns>
             <column id="0">
-              <property name="weight">2</property>
+              <property name="weight">3</property>
+            </column>
+            <column id="1">
+              <property name="weight">1</property>
             </column>
           </columns>
         </layout>
         <child>
           <object class="ttk.Treeview" id="tv">
+            <property name="height">100</property>
             <property name="selectmode">extended</property>
             <property name="yscrollcommand">tvScrollbar.set</property>
             <layout>
@@ -136,6 +137,7 @@
     </child>
     <child>
       <object class="ttk.Frame" id="CommandFrame">
+        <property name="height">40</property>
         <layout>
           <property name="column">0</property>
           <property name="padx">4</property>
@@ -178,6 +180,7 @@
     </child>
     <child>
       <object class="ttk.Frame" id="StatusFrame">
+        <property name="height">40</property>
         <property name="padding">4</property>
         <property name="relief">sunken</property>
         <layout>
