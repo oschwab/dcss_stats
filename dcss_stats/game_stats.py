@@ -6,14 +6,17 @@ from os import listdir
 from os.path import isfile, join
 
 from dcss_stats.core.dcss_data import get_short_background, get_short_specie
+from dcss_stats.core.eventhook import EventHook
 from .core import logger
 
 
 
 class StatColumn(Enum):
     dungeon = 0
+    game_number=auto()
+    game_id=auto()
     background = auto()
-    sbackground=auto()
+    species = auto()
     datestart= auto()
     datedeath=auto()
     name = auto()
@@ -26,8 +29,6 @@ class StatColumn(Enum):
     god = auto()
     religion_rank = auto()
     filename = auto()
-    species = auto()
-    sspecies = auto()
     version = auto()
     endgame_cause = auto()
     self_kill = auto()
@@ -36,8 +37,8 @@ class StatColumn(Enum):
     escaped = auto()
     orb=auto()
     runes=auto()
-    game_number=auto()
-
+    sbackground=auto()
+    sspecies = auto()
 
 
 
@@ -68,7 +69,10 @@ class StatColumn(Enum):
            self.score: 'Score',
            self.escaped: 'Escaped',
            self.orb: 'Orb',
-           self.runes: 'Runes'
+           self.runes: 'Runes',
+           self.game_number: '#',
+           self.game_id: 'Game number'
+
                    }
        if self in labels.keys():
            return(labels[self])
@@ -115,6 +119,11 @@ class GameStats:
 
     Stats = []
 
+    onChange = EventHook()
+    onCompleted = EventHook()
+    current_file = 0
+
+
     def __init__(self, configuration):
         """
         Constructor
@@ -132,7 +141,7 @@ class GameStats:
         Analyze morgue files in :MorguePath and fill :Stats
         """
         self.Stats = []
-        i=0
+        self.current_file=0
         for morgue in self.MorgueFiles:
             logger.info("Analyzing " + morgue)
             with open(join(self.MorguePath, morgue)) as file:
@@ -153,14 +162,38 @@ class GameStats:
 
 
 
-            i=i+1
-            print("{}/{}".format(i,len(self.MorgueFiles)))
+            self.current_file=self.current_file+1
+            print("{}/{}".format(self.current_file,len(self.MorgueFiles)))
+            self.onChange.fire()
+
+
         # Finally, sort and number the games
-        self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
-        i=0
+
+        # sort by date
+        #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.datedeath), reverse=False)
+        self.Stats = self.sort_stat(StatColumn.datedeath)
+        self.current_file=0
         for s in self.Stats:
-            i=i+1
-            s[StatColumn.game_number] = i
+            self.current_file=self.current_file+1
+            s[StatColumn.game_id] = self.current_file
+
+        # sort by score
+        #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
+        self.Stats = self.sort_stat(StatColumn.datedeath,True)
+        self.current_file=0
+        for s in self.Stats:
+            self.current_file=self.current_file+1
+            s[StatColumn.game_number] = self.current_file
+
+
+
+
+        self.onCompleted.fire()
+
+    def sort_stat(self,column,preverse=False,stat=None):
+        if stat is None:
+            stat = self.Stats
+        return(sorted(self.Stats, key=operator.itemgetter(column), reverse=preverse))
 
     def get_number_of_game(self, stat=None):
         """
@@ -449,6 +482,9 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.endgame_cause] = 'Escaped'
             stat[StatColumn.escaped] = True
             stat[StatColumn.orb] = True
+            linetab = morgue[line + 1].strip().split(' ')
+            stat[StatColumn.runes] = int(linetab[2])
+
         elif curline.strip().lower().startswith('asphyxiated'):
             stat[StatColumn.endgame_cause] = 'Asphyxiated'
         elif curline.strip().lower().startswith('drowned'):

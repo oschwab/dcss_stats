@@ -30,6 +30,9 @@ class Server(Enum):
         }
         return labels[self]
 
+    def __str__(self):
+        return self.name.upper()
+
 
 class DCSSDownloader:
     server=Server.cpo

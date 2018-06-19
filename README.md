@@ -11,6 +11,13 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
 
 - Developped in Python 3.6 using Jetbrains PyCharm
 - Project template generated using [CookieCutter](https://github.com/kragniz/cookiecutter-pypackage-minimal)
+- GUI using TKinter and [Pygubu](https://github.com/alejandroautalan/pygubu/)
+
+
+## GUI
+
+WORK IN PROGRESS
+
 
 ## Command line interface
 
@@ -22,6 +29,7 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
  - -w --warn : logger warning level (default INFO)
  - -p --path : DCSS installation path
  - -o --output : output  : text/console/markdown ( default text)
+ - -i : interactive mode _(work in progress)_
  - -s --scorevol : generate CSV with score evolution values (default False)
 
 ### Configuration file
@@ -60,17 +68,6 @@ For each morgue file : (unrealistic example)
     
 
 
-## Roadmap (priority desc)
-
-- Sorting dungeons display (d:1 to d:15 , then lair, ...)
-- Handling quit
-- Escape stats, rune stats
-- Filter stat from command line (ex : limit results to a character)
-- Limit results (verbose mode , top 10 , ??)
-- Better text and mardown presentation (tables ?)
-- Dungeon sprints ?
-- HTML output with links to DCSS tiles 
-- GUI (which toolkit ?)
 
 
 
