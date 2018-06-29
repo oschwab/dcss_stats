@@ -21,7 +21,7 @@ def main(argv=None):
     Main function (heh :)
     """
     args = _args(argv)
-    #args.morgue_path = join(args.path, 'morgue')
+    #args.morgue_path = join(args.morgue_repo, 'morgue')
     f = open("dcss_stats.log", "a", encoding="utf-8")
     logger.start(args.warn,f)
     logger.info("version {}".format(__version__))
@@ -88,7 +88,7 @@ def _args(argv=None):
             help="print version and exit")
     parser.add_argument("-w", "--warn", default="INFO",
             help="logger warning level [WARN]")
-    parser.add_argument("-p", "--path", type=str, help="DCSS path")
+    parser.add_argument("-p", "--morgue_repo", type=str, help="DCSS morgue_repo")
     parser.add_argument("-i", "--interactive", action="store_false", default="False",
                         help="interactive mode [False] (output is ignored)")
     parser.add_argument("-o", "--output", default="text",

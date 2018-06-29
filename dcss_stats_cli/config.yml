@@ -3,7 +3,6 @@
 ##
 core:
   logging: DEBUG
-path: K:\Perso\dcss
 # possible values : text,console,markdown,html
 output: html
 path: K:\Perso\dcss

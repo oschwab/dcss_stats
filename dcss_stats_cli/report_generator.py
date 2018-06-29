@@ -64,7 +64,7 @@ def generate_report(output,config,gamestats):
 def write_percharacter_stats(output,gamestats, list_character):
 
     output.write_header("Per character statistic",2)
-    # TODO Sort by name / games / orb ..?
+    # TODO Sort by char_name / games / orb ..?
     sorted_listchar = list_character.sort()
 
     for lc in list_character:
@@ -88,7 +88,7 @@ def write_percharacter_stats(output,gamestats, list_character):
 def write_perdungeonlevel_stats(output,gamestats, list_dungeonlevel):
     output.write_header("Per dungeon statistic",2)
 
-    # TODO Sort by name / games / orb ..?
+    # TODO Sort by char_name / games / orb ..?
     list_dungeonlevel.sort()
 
     for lc in list_dungeonlevel:

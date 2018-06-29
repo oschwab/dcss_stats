@@ -1,6 +1,8 @@
 import csv
 
-from dcss_stats.core.dcss_data import jobs
+import os
+
+from dcss_stats.core.dcss_data import jobs,species
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
 
 try:
@@ -10,7 +12,6 @@ except:
 import pygubu
 from dcss_stats.game_stats import StatColumn,GameStats
 from dcss_stats.core import logger,config
-from os.path import join
 from dcss_stats import __version__
 from tkinter import messagebox
 
@@ -23,16 +24,16 @@ class Application:
     current_stat = None
     filtered = False
     dcss_downloader=None
-#    displayed_cols_nofilter = [ StatColumn.score, StatColumn.datedeath, StatColumn.dun_lev, StatColumn.endgame_cause, StatColumn.background, StatColumn.species]
-    displayed_cols_nofilter = [e for e in StatColumn]
-    displayed_cols_filter = displayed_cols_nofilter
-    displayed_cols = []
+
+    numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes)
     chkfilter_state = None
     config_dialog = None
-
+    matrix_view= None
+    master=None
 
     def __init__(self, master):
 
+        self.master=master
         #1: Create a builder
         self.builder = builder = pygubu.Builder()
 
@@ -52,7 +53,7 @@ class Application:
         self.init_morguedl()
 
     def init_morguedl(self):
-        self.dcss_downloader = DCSSDownloader(server=Server[config.server], user=config.user ,path=config.morgue_path)
+        self.dcss_downloader = DCSSDownloader(server=Server[config.server], user=config.user ,morgue_repo=config.morgue_repository,offline_morgue=config.offline_morgue_path)
         self.dcss_downloader.onChange += self.update_download
         self.dcss_downloader.onCompleted += self.download_completed
 
@@ -61,8 +62,8 @@ class Application:
         map(tv.delete, tv.get_children())
         for s in self.game_stats.Stats:
             sb = [s[x] for x in self.displayed_cols]
-            sb.remove(s[StatColumn.game_number])
-            gn = s[StatColumn.game_number]
+            sb.remove(s[StatColumn.row_number])
+            gn = s[StatColumn.row_number]
             if ((s[StatColumn.escaped]) and (s[StatColumn.orb]) ):
                 ttags=('escaped',)
             else:
@@ -73,14 +74,10 @@ class Application:
         #
         # Treeview
         #
-        if self.filtered:
-            self.displayed_cols = self.displayed_cols_nofilter
-        else:
-            self.displayed_cols = self.displayed_cols_filter
+
+        self.displayed_cols = [e for e in StatColumn]
         tv = self.builder.get_object('tv', master)
         colnames = [str(c) for c in self.displayed_cols]
-        colnames.remove(str(StatColumn.game_number))
-        colnames.insert(0, '#')
         tv['columns'] = tuple(colnames)
 
         sb = self.builder.get_object('tvScrollbar', master)
@@ -89,6 +86,11 @@ class Application:
         hb = self.builder.get_object('hzScrollbar', master)
         hb.configure(command=tv.xview)
         tv.configure(xscrollcommand=hb.set)
+
+        for col in colnames:
+            tv.heading(col, text=col, command=lambda _col=col: \
+                self.treeview_sort_column(tv, _col, False))
+
 
         tv.tag_configure('escaped', background='green')
 
@@ -117,10 +119,22 @@ class Application:
         btnSettings= self.builder.get_object('cmdSettings', master)
         btnSettings.bind("<Button-1>", self.show_config_dialog)
 
+        btnMatrix= self.builder.get_object('cmdMatrix', master)
+        btnMatrix.bind("<Button-1>", self.show_matrix_view)
+
+        tv.bind("<Double-1>", self.on_tv_doubleclick)
+
         self.mainwindow.bind("<Map>",self.mainwindow_activate)
         chkfilter = self.builder.get_object('chkfilter', master)
         self.chkfilter_state = tk.IntVar()
         chkfilter.configure(command=self.chkfilter_clicked,variable=self.chkfilter_state)
+
+    def on_tv_doubleclick(self, event):
+        tv = self.builder.get_object('tv', self.master)
+        item = tv.item(tv.selection()[0])
+        gamefile = os.path.join(config.morgue_repository, item['values'][StatColumn.filename._value_-1])
+        os.system(gamefile)
+
 
     def show_config_dialog(self,event):
         if self.config_dialog is None:
@@ -133,8 +147,12 @@ class Application:
 
             def dlgconfig_activate(event):
                 txtUsername=self.builder.get_object('txtUsername', self.mainwindow)
-                txtUsername.delete(0, tk.END)
-                txtUsername.insert(0,config.user)
+                set_text(txtUsername,config.user)
+                morgueRepository=self.builder.get_object('morgueRepository',self.mainwindow)
+                set_text(morgueRepository, config.morgue_repository)
+                morgueOffStorage=self.builder.get_object('morgueOffStorage',self.mainwindow)
+                set_text(morgueOffStorage, config.offline_morgue_path)
+
 
             def dialog_btsave_clicked():
                 dialog.close()
@@ -143,15 +161,32 @@ class Application:
             btnclose['command'] = dialog_btsave_clicked
             self.config_dialog.bind("<Map>", dlgconfig_activate)
 
+            #TODO Load paths from config
+
             dialog.run()
         else:
             self.config_dialog.show()
 
+    def show_matrix_view(self, event):
+        self.matrix_view= self.builder.get_object('frameMatrix', self.mainwindow)
+        #self.matrix_view.pack(expand=True, fill="both")
+        tv = self.builder.get_object('tvMatrix', self.mainwindow)
+        colnames = [str(c) for c in species]
+        colnames.insert(0, '#')
+        tv['columns'] = tuple(colnames)
+        vals=()
+        ttags=()
+        for j in jobs:
+            tv.insert('', 'end', text=str(j),  values=tuple(vals), tags=ttags)
+
+
+
+        self.matrix_view.show()
+
+
     def load_config(self):
         f = open("dcss_stats.log", "a", encoding="utf-8")
         config.load('./config.yml')
-        if (not "morgue_path" in config.keys()):
-            config.morgue_path = join(config.path, 'morgue')
         logger.start(config.core.logging, f)
         logger.info("version {}".format(__version__))
 
@@ -182,6 +217,11 @@ class Application:
         progress["value"] = self.dcss_downloader.nb_downloaded
         progress["maximum"] = self.dcss_downloader.nb_files
         progress.update_idletasks()
+        lblstatus =  self.builder.get_object('lblStatus', self.mainwindow)
+        lblstatus.configure(text=f'Downloading... {self.dcss_downloader.nb_downloaded} / {self.dcss_downloader.nb_files}')
+        lblstatus.update_idletasks()
+
+
 
     def download_completed(self):
         lblstatus =  self.builder.get_object('lblStatus', self.mainwindow)
@@ -231,6 +271,24 @@ class Application:
         else:
             set_enabled(framefilter.winfo_children(),False)
 
+    def treeview_sort_column(self,tv, col, reverse):
+
+        numeric_cols_lbl = list(str(c) for c in self.numeric_cols)
+        if (col in numeric_cols_lbl):
+            l = [(int(tv.set(k, col)), k) for k in tv.get_children('')]
+        else:
+            l = [(tv.set(k, col), k) for k in tv.get_children('')]
+
+        l.sort(reverse=reverse)
+
+        # rearrange items in sorted positions
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+
+        # reverse sort next time
+        tv.heading(col, command=lambda: \
+                   self.treeview_sort_column(tv, col, not reverse))
+
 
 def set_enabled(childList, enabled):
     if enabled==True:
@@ -239,6 +297,14 @@ def set_enabled(childList, enabled):
         sstate='disabled'
     for child in childList:
         child.configure(state=sstate)
+
+
+def set_text(control,text):
+    control.delete(0, tk.END)
+    control.insert(0,text)
+
+
+
 
 
 if __name__ == '__main__':

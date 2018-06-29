@@ -3,7 +3,7 @@ import operator
 import datetime
 from enum import Enum, auto
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, exists
 
 from dcss_stats.core.dcss_data import get_short_background, get_short_specie
 from dcss_stats.core.eventhook import EventHook
@@ -12,14 +12,14 @@ from .core import logger
 
 
 class StatColumn(Enum):
-    dungeon = 0
-    game_number=auto()
+    row_number=0
+    dungeon = auto()
     game_id=auto()
     background = auto()
     species = auto()
     datestart= auto()
     datedeath=auto()
-    name = auto()
+    char_name = auto()
     hp = auto()
     surname = auto()
     duration = auto()
@@ -50,7 +50,7 @@ class StatColumn(Enum):
            self.sbackground: 'Bgrnd',
            self.datestart: 'Start of game',
            self.datedeath: 'Death date',
-           self.name: 'Name',
+           self.char_name: 'Name',
            self.hp: 'Hp',
            self.surname: 'Surname',
            self.duration: 'Duration',
@@ -70,14 +70,14 @@ class StatColumn(Enum):
            self.escaped: 'Escaped',
            self.orb: 'Orb',
            self.runes: 'Runes',
-           self.game_number: '#',
+           self.row_number: '#',
            self.game_id: 'Game number'
 
                    }
        if self in labels.keys():
            return(labels[self])
        else:
-           return("")
+           return("?"+str(self._value_))
 
 
 
@@ -96,7 +96,7 @@ class GameStats:
     Example of line in Stats :
     {'dungeon': 'Dungeon',
     'background': 'Ice Elementalist',
-    'name': 'Awutz',
+    'char_name': 'Awutz',
     'hp': '30',
     'surname': 'the Chiller',
     'duration': '00:11:56',
@@ -129,11 +129,15 @@ class GameStats:
         Constructor
         :param morguepath: Path to crawl morgue files (ex: C:\dcss\morgue )
         """
-        self.MorguePath = configuration.morgue_path
+        self.MorguePath = configuration.morgue_repository
+
+
         self.MorgueFiles = []
-        for f in listdir(self.MorguePath):
-            if isfile(join(self.MorguePath, f)) and f[:6] == "morgue" and f[-3:] == "txt":
-                self.MorgueFiles.append(f)
+
+        if exists(self.MorguePath):
+            for f in listdir(self.MorguePath):
+                if isfile(join(self.MorguePath, f)) and f[:6] == "morgue" and f[-3:] == "txt":
+                    self.MorgueFiles.append(f)
 
     def analyze(self):
 
@@ -179,11 +183,8 @@ class GameStats:
 
         # sort by score
         #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
-        self.Stats = self.sort_stat(StatColumn.datedeath,True)
-        self.current_file=0
-        for s in self.Stats:
-            self.current_file=self.current_file+1
-            s[StatColumn.game_number] = self.current_file
+        self.Stats = self.sort_stat(StatColumn.score,True)
+
 
 
 
@@ -191,9 +192,22 @@ class GameStats:
         self.onCompleted.fire()
 
     def sort_stat(self,column,preverse=False,stat=None):
+        """
+        sort the given stat structure (global one if none)
+        :param column: the column for sort
+        :param preverse: reverse orcer or not
+        :param stat: the stat structure
+        :return:  stat structure sorted on column
+        """
         if stat is None:
             stat = self.Stats
-        return(sorted(self.Stats, key=operator.itemgetter(column), reverse=preverse))
+        stat = sorted(stat, key=operator.itemgetter(column), reverse=preverse)
+        idx=0
+        for s in stat:
+            idx=idx+1
+            s[StatColumn.row_number] =idx
+        return stat
+        
 
     def get_number_of_game(self, stat=None):
         """
@@ -374,7 +388,7 @@ i       From the stat structure in param , get the count of each possible value 
         """
         Create an entry for the stat structure
         :param morgue: the morgue file (array of string)
-        :param morguefile : the morgue file name
+        :param morguefile : the morgue file char_name
         :return: the information contained in the morge file
         """
 
@@ -407,7 +421,7 @@ i       From the stat structure in param , get the count of each possible value 
         line = line + 2
         curline = morgue[line]
         stat[StatColumn.score] = int(curline[:curline.find(' ')])
-        stat[StatColumn.name] = curline[curline.find(' ') + 1:curline.find('the') - 1]
+        stat[StatColumn.char_name] = curline[curline.find(' ') + 1:curline.find('the') - 1]
         stat[StatColumn.surname] = curline[curline.find('the '):curline.find('(') - 1]
         stat[StatColumn.xp_level] = curline[curline.find('level ') + 6:curline.find(',')]
         stat[StatColumn.hp] = curline[curline.find('/') + 1:curline.find('HP') - 1]

@@ -212,6 +212,16 @@
             </layout>
           </object>
         </child>
+        <child>
+          <object class="ttk.Button" id="cmdMatrix">
+            <property name="text" translatable="yes">Game matrix</property>
+            <layout>
+              <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -268,14 +278,14 @@
     </child>
   </object>
   <object class="pygubu.builder.widgets.dialog" id="dlgConfig">
-    <property name="height">200</property>
+    <property name="height">300</property>
     <property name="modal">true</property>
     <property name="padx">8</property>
     <property name="pady">8</property>
-    <property name="width">400</property>
+    <property name="width">600</property>
     <child>
       <object class="ttk.Frame" id="Frame_2">
-        <property name="height">20</property>
+        <property name="height">50</property>
         <property name="width">20</property>
         <layout>
           <property name="column">0</property>
@@ -287,7 +297,7 @@
         <child>
           <object class="ttk.Label" id="Label_1">
             <property name="font">TkDefaultFont</property>
-            <property name="text" translatable="yes">Morgue storage folder</property>
+            <property name="text" translatable="yes">Offline Morgue folder</property>
             <property name="underline">0</property>
             <layout>
               <property name="column">0</property>
@@ -298,8 +308,11 @@
           </object>
         </child>
         <child>
-          <object class="pygubu.builder.widgets.pathchooserinput" id="morgueStorage">
-            <property name="type">directory</property>
+          <object class="ttk.Entry" id="morgueOffStorage">
+            <property name="cursor">arrow</property>
+            <property name="exportselection">false</property>
+            <property name="font">TkDefaultFont</property>
+            <property name="takefocus">false</property>
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
@@ -315,7 +328,7 @@
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
-              <property name="row">3</property>
+              <property name="row">7</property>
               <property name="sticky">nsew</property>
             </layout>
           </object>
@@ -329,7 +342,7 @@
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
-              <property name="row">4</property>
+              <property name="row">8</property>
               <property name="sticky">nsew</property>
             </layout>
           </object>
@@ -351,6 +364,30 @@
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">6</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_6">
+            <property name="text" translatable="yes">Morgue repository folder</property>
+            <layout>
+              <property name="propagate">True</property>
+              <property name="row">3</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="morgueRepository">
+            <property name="cursor">arrow</property>
+            <property name="exportselection">false</property>
+            <property name="font">TkDefaultFont</property>
+            <property name="takefocus">false</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">4</property>
               <property name="sticky">nsew</property>
             </layout>
           </object>
@@ -400,6 +437,24 @@
             </layout>
           </object>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="pygubu.builder.widgets.dialog" id="frameMatrix">
+    <property name="height">200</property>
+    <property name="modal">true</property>
+    <property name="padx">8</property>
+    <property name="pady">8</property>
+    <property name="width">400</property>
+    <child>
+      <object class="ttk.Treeview" id="tvMatrix">
+        <property name="selectmode">extended</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">nsew</property>
+        </layout>
       </object>
     </child>
   </object>
