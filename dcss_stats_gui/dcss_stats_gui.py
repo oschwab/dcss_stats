@@ -78,6 +78,7 @@ class Application:
         self.displayed_cols = [e for e in StatColumn]
         tv = self.builder.get_object('tv', master)
         colnames = [str(c) for c in self.displayed_cols]
+        colnames.remove(str(StatColumn.row_number))
         tv['columns'] = tuple(colnames)
 
         sb = self.builder.get_object('tvScrollbar', master)
@@ -90,16 +91,12 @@ class Application:
         for col in colnames:
             tv.heading(col, text=col, command=lambda _col=col: \
                 self.treeview_sort_column(tv, _col, False))
+            tv.column(col, anchor='w', width=100)
 
 
         tv.tag_configure('escaped', background='green')
 
 
-        cpt = 0
-        for c in colnames:
-            tv.heading('#' + str(cpt), text=c)
-            tv.column('#' + str(cpt), anchor='w', width=100)
-            cpt = cpt + 1
         #
         # Combos
         #
@@ -248,7 +245,9 @@ class Application:
 
 
     def export_csv(self,event):
-        with open('global.csv', 'w') as csvfile:
+        filename='global.csv'
+
+        with open(filename, 'w') as csvfile:
             writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
 
             header_written = False
@@ -258,6 +257,7 @@ class Application:
                     header_written = True
 
                 writer.writerow(s.values())
+        os.system(filename)
 
     def chkfilter_clicked(self):
         chkfilter = self.builder.get_object('chkfilter', self)
