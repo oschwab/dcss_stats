@@ -2,6 +2,8 @@ from enum import Enum, auto
 import urllib.request
 import os
 
+import shutil
+
 from dcss_stats.core.eventhook import EventHook
 
 
@@ -37,7 +39,7 @@ class Server(Enum):
 class DCSSDownloader:
     server=Server.cpo
     user=''
-    path=''
+    morgue_repo= ''
 
     onChange = EventHook()
     onCompleted = EventHook()
@@ -46,15 +48,31 @@ class DCSSDownloader:
     nb_downloaded=0
 
 
-    def __init__(self,server,user,path):
+    def __init__(self,server,user,morgue_repo,offline_morgue):
         self.server = server
         self.user=user
-        self.path=path
+        self.morgue_repo=morgue_repo
+        self.offline_morgue = offline_morgue
 
 
 
     def download(self):
         user = self.user
+        #TODO get new files from offline morgue too
+        if not os.path.exists(self.morgue_repo):
+            print('Creating ' + self.morgue_repo + 'folder')
+            os.mkdir(self.morgue_repo)
+
+        src_files = os.listdir(self.offline_morgue)
+        for file_name in src_files:
+            full_file_name = os.path.join(self.offline_morgue, file_name)
+            dest_file_name = os.path.join(self.morgue_repo, file_name)
+
+            if (os.path.isfile(full_file_name)  and not os.path.exists(dest_file_name) ) :
+                shutil.copy(full_file_name, self.morgue_repo)
+
+
+
         url = "https://" + self.server.to_address() + "/morgue/" + user + "/"
         print("URL=" + url)
         response = urllib.request.urlopen(url)
@@ -68,10 +86,12 @@ class DCSSDownloader:
             if l.startswith('<a href') :
                 file=l.split('"')[1]
                 ext = file[-4:]
-                if (ext in ['.txt','.lst','.map']):
+                #TODO see what are other extension for ..
+                #if (ext in ['.txt','.lst','.map']):
+                if (ext in ['.txt']):
                     files.append(file)
 
-        for dirname, dirnames, filenames in os.walk(self.path):
+        for dirname, dirnames, filenames in os.walk(self.morgue_repo):
             for filename in filenames:
                 if filename in files:
                     files.remove(filename)
@@ -85,7 +105,7 @@ class DCSSDownloader:
             response = urllib.request.urlopen(url)
             data = response.read()
             text = data.decode('utf-8')
-            with open(os.path.join(self.path,file_to_dl), "w", encoding='utf-8') as text_file:
+            with open(os.path.join(self.morgue_repo, file_to_dl), "w", encoding='utf-8') as text_file:
                 text_file.write(text)
             self.nb_downloaded = self.nb_downloaded+1
             self.onChange.fire()
@@ -93,7 +113,7 @@ class DCSSDownloader:
 
 
 # if __name__ == '__main__':
-#     d = DCSSDownloader(server=Server.cpo,user='lepoulpe303',path='K:\Perso\dcss\morgue')
+#     d = DCSSDownloader(server=Server.cpo,user='lepoulpe303',morgue_repo='K:\Perso\dcss\morgue')
 #     d.download()
 
 
