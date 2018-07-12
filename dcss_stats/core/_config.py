@@ -4,7 +4,7 @@ this object to store application-wide configuration values.
 """
 
 from re import compile
-from yaml import load
+from yaml import load, dump, Dumper
 
 from ._logger import logger
 
@@ -53,6 +53,10 @@ class YamlConfig(_AttrDict):
         if path:
             self.load(path, root, params)
         return
+
+    def save(self,path):
+        r = dump(self,Dumper=Dumper)
+        print(r)
 
     def load(self, path, root=None, params=None):
         """ Load data from YAML configuration files.

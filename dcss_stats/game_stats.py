@@ -208,6 +208,35 @@ class GameStats:
             s[StatColumn.row_number] =idx
         return stat
         
+    def get_species_for_job(self,job, stat=None):
+        """
+        :return: the list of species with selected jobs
+        """
+        if stat is None:
+            stat = self.Stats
+        specs=()
+        for s in stat:
+            if s[StatColumn.background]==job:
+                if not s[StatColumn.species] in specs:
+                    specs = specs + (s[StatColumn.species],)
+
+        return(specs)
+
+
+    def get_job_for_species(self,species, stat=None):
+        """
+        :return: the list of species with selected jobs
+        """
+        if stat is None:
+            stat = self.Stats
+        jobs=()
+        for s in stat:
+            if s[StatColumn.species]==species:
+                if not s[StatColumn.background] in jobs :
+                    jobs = jobs + (s[StatColumn.background] ,)
+
+        return(jobs)
+
 
     def get_number_of_game(self, stat=None):
         """
@@ -243,10 +272,22 @@ class GameStats:
             stat = self.Stats
 
         filtstat = []
+        rowid=0
         for s in stat:
             if s[column] == value:
+                rowid=rowid+1
+                s[StatColumn.row_number] = rowid
                 filtstat.append(s)
         return filtstat
+
+
+    def get_average_score(self,stat=None):
+        if stat is None:
+            stat = self.Stats
+        avg=0
+        scores = [c[StatColumn.score] for c in stat]
+        return (sum(scores) / float(len(scores)))
+
 
 
     def get_top(self,stat=None,top=10):
@@ -635,8 +676,6 @@ i       From the stat structure in param , get the count of each possible value 
         linetab = morgue[line].strip().split(' ')
         stat[StatColumn.duration] = linetab[3]
         stat[StatColumn.turns] = linetab[4][1:]
-
-
 
         return stat
 

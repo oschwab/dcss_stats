@@ -5,6 +5,8 @@ import os
 from dcss_stats.core.dcss_data import jobs,species
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
 
+CONFIG_YML = './config.yml'
+
 try:
     import tkinter as tk  # for python 3
 except:
@@ -20,6 +22,8 @@ from tkinter import messagebox
 
 class Application:
 
+    ALL_VALUES = '--All'
+
     game_stats = None
     current_stat = None
     filtered = False
@@ -30,6 +34,9 @@ class Application:
     config_dialog = None
     matrix_view= None
     master=None
+
+
+
 
     def __init__(self, master):
 
@@ -49,6 +56,8 @@ class Application:
         root.resizable(True, True)
 
         self.load_config()
+
+        self.selected_server = tk.StringVar()
         self.init_controls(master)
         self.init_morguedl()
 
@@ -57,10 +66,11 @@ class Application:
         self.dcss_downloader.onChange += self.update_download
         self.dcss_downloader.onCompleted += self.download_completed
 
-    def fill_treeview(self, master):
-        tv = self.builder.get_object('tv', master)
-        map(tv.delete, tv.get_children())
-        for s in self.game_stats.Stats:
+    def fill_treeview(self):
+        tv = self.builder.get_object('tv', self.mainwindow)
+
+        tv.delete(*tv.get_children())
+        for s in self.current_stat:
             sb = [s[x] for x in self.displayed_cols]
             sb.remove(s[StatColumn.row_number])
             gn = s[StatColumn.row_number]
@@ -95,17 +105,40 @@ class Application:
 
 
         tv.tag_configure('escaped', background='green')
+        tv.bind("<Double-1>", self.on_tv_doubleclick)
+
+        #
+        # Stats treeview
+        #
+
+        tv_stats = self.builder.get_object('tvMsg', self.mainwindow)
+        tv_stats['columns'] = (' ',' ')
 
 
         #
-        # Combos
+        # Filter
         #
-        cmb_back = self.builder.get_object('cmbBackground', master)
+
+        chkfilter = self.builder.get_object('chkfilter', master)
+        self.chkfilter_state = tk.IntVar()
+        chkfilter.configure(command=self.chkfilter_clicked,variable=self.chkfilter_state)
+
+        cmb_back = self.builder.get_object('lstBackground', master)
         list_jobs = ('--All',) + tuple(sorted(jobs.keys()))
-        cmb_back.configure(values=list_jobs)
+        cmb_back.bind('<<ListboxSelect>>', self.on_back_select)
+
+        for item in list_jobs:
+            cmb_back.insert(tk.END, item)
+
+        cmb_spec = self.builder.get_object('lstSpecies', master)
+        list_spec = ('--All',) + tuple(sorted(species.keys()))
+        cmb_spec.bind('<<ListboxSelect>>', self.on_job_select)
+
+        for item in list_spec :
+            cmb_spec.insert(tk.END, item)
 
         #
-        # Bindings
+        # Buttons
         #
         btnDown = self.builder.get_object('cmdDownload', master)
         btnDown.bind("<Button-1>", self.download_morgue_click)
@@ -119,12 +152,89 @@ class Application:
         btnMatrix= self.builder.get_object('cmdMatrix', master)
         btnMatrix.bind("<Button-1>", self.show_matrix_view)
 
-        tv.bind("<Double-1>", self.on_tv_doubleclick)
 
+        #
+        # Main window
+        #
         self.mainwindow.bind("<Map>",self.mainwindow_activate)
-        chkfilter = self.builder.get_object('chkfilter', master)
-        self.chkfilter_state = tk.IntVar()
-        chkfilter.configure(command=self.chkfilter_clicked,variable=self.chkfilter_state)
+
+    def on_back_select(self,event):
+        w = event.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+
+        cmb_spec = self.builder.get_object('lstSpecies', self.master)
+        if (cmb_spec.curselection() != ()):
+            save_val = cmb_spec.get(cmb_spec.curselection())
+        else:
+            save_val = None
+        cmb_spec.delete(0, tk.END)
+        list_spec = (self.ALL_VALUES,)
+
+        if (value != self.ALL_VALUES):
+            list_spec = list_spec + tuple(sorted(self.game_stats.get_species_for_job(value,self.current_stat) ))
+        else:
+            list_spec = list_spec + tuple(sorted(species.keys()))
+
+        for item in list_spec:
+            cmb_spec.insert(tk.END, item)
+            if (item==save_val):
+                cmb_spec.selection_set(tk.END)
+        self.apply_filter()
+
+    def on_job_select(self,event):
+        w = event.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+
+        cmb_job = self.builder.get_object('lstBackground', self.master)
+        if (cmb_job.curselection() != ()):
+            save_val = cmb_job.get(cmb_job.curselection())
+        else:
+            save_val=None
+        cmb_job.delete(0, tk.END)
+        list_job= (self.ALL_VALUES,)
+
+        if (value != self.ALL_VALUES):
+            list_job = list_job + tuple(sorted(self.game_stats.get_job_for_species(value,self.current_stat) ))
+        else:
+            list_job = list_job + tuple(sorted(jobs.keys()))
+
+        for item in list_job:
+            cmb_job.insert(tk.END, item)
+            if (item==save_val):
+                cmb_job.selection_set(tk.END)
+        self.apply_filter()
+
+    def apply_filter(self):
+        cmb_job = self.builder.get_object('lstBackground', self.master)
+        job = self.ALL_VALUES
+        if (cmb_job.curselection() != ()):
+            job = cmb_job.get(cmb_job.curselection())
+
+        cmb_spec = self.builder.get_object('lstSpecies', self.master)
+
+        spec=self.ALL_VALUES
+        if (cmb_spec.curselection())!=():
+            spec = cmb_spec.get(cmb_spec.curselection())
+        if (job != self.ALL_VALUES):
+            self.current_stat = self.game_stats.get_filtered_stat(stat=self.current_stat ,value=job,column=StatColumn.background)
+        if (spec != self.ALL_VALUES):
+            self.current_stat = self.game_stats.get_filtered_stat(stat=self.current_stat ,value=spec,column=StatColumn.species)
+        self.display_data()
+
+
+    def display_data(self):
+        self.fill_treeview()
+        self.fill_stats()
+
+    def fill_stats(self):
+        tv_stats = self.builder.get_object('tvMsg', self.mainwindow)
+
+        tv_stats.delete(*tv_stats.get_children())
+        tv_stats.insert('', 'end', text='Number of games:', values=(len(self.current_stat),))
+        tv_stats.insert('', 'end', text='Average score:', values=(self.game_stats.get_averagescore(self.current_stat),))
+
 
     def on_tv_doubleclick(self, event):
         tv = self.builder.get_object('tv', self.master)
@@ -140,7 +250,7 @@ class Application:
 
             cmbServer =self.builder.get_object('cmbServer', self.mainwindow)
             lstserver = list(map(str, Server))
-            cmbServer.configure(values=lstserver)
+            cmbServer.configure(values=lstserver,textvariable=self.selected_server)
 
             def dlgconfig_activate(event):
                 txtUsername=self.builder.get_object('txtUsername', self.mainwindow)
@@ -149,9 +259,16 @@ class Application:
                 set_text(morgueRepository, config.morgue_repository)
                 morgueOffStorage=self.builder.get_object('morgueOffStorage',self.mainwindow)
                 set_text(morgueOffStorage, config.offline_morgue_path)
-
+                self.selected_server.set(config.server.upper())
 
             def dialog_btsave_clicked():
+                '''
+                config.user=
+                config.morgue_repository =
+                config.offline_morgue_path =
+                config.server =
+                '''
+                config.save(CONFIG_YML)
                 dialog.close()
 
             btnclose = self.builder.get_object('btnSave')
@@ -166,8 +283,17 @@ class Application:
 
     def show_matrix_view(self, event):
         self.matrix_view= self.builder.get_object('frameMatrix', self.mainwindow)
-        #self.matrix_view.pack(expand=True, fill="both")
-        tv = self.builder.get_object('tvMatrix', self.mainwindow)
+        self.matrix_view.width = 100
+        self.matrix_view.height = 500
+        tv = self.builder.get_object('tvMatrix', self.matrix_view)
+
+        sb = self.builder.get_object('Scrollbar_v', self.master)
+        sb.configure(command=tv.yview)
+        tv.configure(yscrollcommand=sb.set)
+        hb = self.builder.get_object('Scrollbar_h', self.master)
+        hb.configure(command=tv.xview)
+        tv.configure(xscrollcommand=hb.set)
+
         colnames = [str(c) for c in species]
         colnames.insert(0, '#')
         tv['columns'] = tuple(colnames)
@@ -175,15 +301,11 @@ class Application:
         ttags=()
         for j in jobs:
             tv.insert('', 'end', text=str(j),  values=tuple(vals), tags=ttags)
-
-
-
         self.matrix_view.show()
-
 
     def load_config(self):
         f = open("dcss_stats.log", "a", encoding="utf-8")
-        config.load('./config.yml')
+        config.load(CONFIG_YML)
         logger.start(config.core.logging, f)
         logger.info("version {}".format(__version__))
 
@@ -200,7 +322,7 @@ class Application:
 
     def mainwindow_activate(self,event):
         self.load_data()
-        self.fill_treeview(self.mainwindow)
+        self.display_data()
 
 
     def download_morgue_click(self,event):
@@ -227,7 +349,7 @@ class Application:
         progress["value"] = 0
         progress["maximum"] = 0
         self.load_data()
-        self.fill_treeview(self.mainwindow)
+        self.display_data()
 
 
     def loaddata_onchange(self):
@@ -292,7 +414,7 @@ class Application:
 
 def set_enabled(childList, enabled):
     if enabled==True:
-        sstate='enabled'
+        sstate='normal'
     else:
         sstate='disabled'
     for child in childList:

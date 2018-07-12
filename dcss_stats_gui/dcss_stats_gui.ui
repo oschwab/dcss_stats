@@ -57,17 +57,7 @@
           <object class="ttk.Label" id="Label_2">
             <property name="text" translatable="yes">Background:</property>
             <layout>
-              <property name="column">0</property>
-              <property name="propagate">True</property>
-              <property name="row">0</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Combobox" id="cmbBackground">
-            <property name="height">2</property>
-            <layout>
-              <property name="column">1</property>
+              <property name="column">2</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
             </layout>
@@ -77,16 +67,31 @@
           <object class="ttk.Label" id="Label_3">
             <property name="text" translatable="yes">Species:</property>
             <layout>
-              <property name="column">2</property>
+              <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
             </layout>
           </object>
         </child>
         <child>
-          <object class="ttk.Combobox" id="cmbSpecies">
+          <object class="tk.Listbox" id="lstBackground">
+            <property name="activestyle">dotbox</property>
+            <property name="exportselection">false</property>
+            <property name="font">TkDefaultFont</property>
+            <property name="selectborderwidth">0</property>
+            <property name="takefocus">true</property>
             <layout>
               <property name="column">3</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Listbox" id="lstSpecies">
+            <property name="exportselection">false</property>
+            <layout>
+              <property name="column">1</property>
               <property name="propagate">True</property>
               <property name="row">0</property>
             </layout>
@@ -98,7 +103,7 @@
       <object class="ttk.Frame" id="TvFrame">
         <property name="height">100</property>
         <property name="padding">4</property>
-        <property name="relief">ridge</property>
+        <property name="relief">groove</property>
         <property name="width">200</property>
         <layout>
           <property name="column">0</property>
@@ -111,6 +116,9 @@
             </row>
             <row id="1">
               <property name="weight">1</property>
+            </row>
+            <row id="2">
+              <property name="weight">0</property>
             </row>
           </rows>
           <columns>
@@ -155,6 +163,18 @@
               <property name="column">0</property>
               <property name="propagate">True</property>
               <property name="row">1</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Treeview" id="tvMsg">
+            <property name="height">10</property>
+            <property name="selectmode">extended</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
               <property name="sticky">nsew</property>
             </layout>
           </object>
@@ -441,20 +461,63 @@
     </child>
   </object>
   <object class="pygubu.builder.widgets.dialog" id="frameMatrix">
-    <property name="height">200</property>
-    <property name="modal">true</property>
+    <property name="height">99</property>
+    <property name="modal">false</property>
     <property name="padx">8</property>
     <property name="pady">8</property>
-    <property name="width">400</property>
     <child>
-      <object class="ttk.Treeview" id="tvMatrix">
-        <property name="selectmode">extended</property>
+      <object class="ttk.Frame" id="Frame_3">
+        <property name="height">200</property>
+        <property name="width">200</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
           <property name="row">0</property>
           <property name="sticky">nsew</property>
+          <rows>
+            <row id="0">
+              <property name="weight">1</property>
+            </row>
+          </rows>
+          <columns>
+            <column id="0">
+              <property name="weight">3</property>
+            </column>
+          </columns>
         </layout>
+        <child>
+          <object class="ttk.Treeview" id="tvMatrix">
+            <property name="selectmode">extended</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Scrollbar" id="Scrollbar_v">
+            <property name="orient">vertical</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Scrollbar" id="Scrollbar_h">
+            <property name="orient">horizontal</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">1</property>
+              <property name="sticky">nsew</property>
+            </layout>
+          </object>
+        </child>
       </object>
     </child>
   </object>

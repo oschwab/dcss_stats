@@ -10,7 +10,7 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
 ## Development
 
 - Developped in Python 3.6 using Jetbrains PyCharm
-- Project template generated using [CookieCutter](https://github.com/kragniz/cookiecutter-pypackage-minimal)
+- Project template generated using [CookieCutter](https://github.com/kragniz/cookiecutter-pypackage-minimal) ["python-app package"](https://github.com/mdklatt/cookiecutter-python-app)
 - GUI using TKinter and [Pygubu](https://github.com/alejandroautalan/pygubu/)
 
 

@@ -95,8 +95,8 @@ class PrettyTable(object):
         header - print a header showing field names (True or False)
         header_style - stylisation to apply to field names in header ("cap", "title", "upper", "lower" or None)
         border - print a border around the table (True or False)
-        hrules - controls printing of horizontal rules after rows.  Allowed values: FRAME, HEADER, ALL, NONE
-        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL, NONE
+        hrules - controls printing of horizontal rules after rows.  Allowed values: FRAME, HEADER, ALL_VALUES, NONE
+        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL_VALUES, NONE
         int_format - controls formatting of integer data
         float_format - controls formatting of floating point data
         padding_width - number of spaces on either side of column data (only used if left and right paddings are None)
@@ -363,13 +363,13 @@ class PrettyTable(object):
         try:
             assert val in (ALL, FRAME, HEADER, NONE)
         except AssertionError:
-            raise Exception("Invalid value for %s!  Must be ALL, FRAME, HEADER or NONE." % name)
+            raise Exception("Invalid value for %s!  Must be ALL_VALUES, FRAME, HEADER or NONE." % name)
 
     def _validate_vrules(self, name, val):
         try:
             assert val in (ALL, FRAME, NONE)
         except AssertionError:
-            raise Exception("Invalid value for %s!  Must be ALL, FRAME, or NONE." % name)
+            raise Exception("Invalid value for %s!  Must be ALL_VALUES, FRAME, or NONE." % name)
 
     def _validate_field_name(self, name, val):
         try:
@@ -571,7 +571,7 @@ class PrettyTable(object):
 
         Arguments:
 
-        hrules - horizontal rules style.  Allowed values: FRAME, ALL, HEADER, NONE"""
+        hrules - horizontal rules style.  Allowed values: FRAME, ALL_VALUES, HEADER, NONE"""
         return self._hrules
     def _set_hrules(self, val):
         self._validate_option("hrules", val)
@@ -583,7 +583,7 @@ class PrettyTable(object):
 
         Arguments:
 
-        vrules - vertical rules style.  Allowed values: FRAME, ALL, NONE"""
+        vrules - vertical rules style.  Allowed values: FRAME, ALL_VALUES, NONE"""
         return self._vrules
     def _set_vrules(self, val):
         self._validate_option("vrules", val)
@@ -956,8 +956,8 @@ class PrettyTable(object):
         fields - names of fields (columns) to include
         header - print a header showing field names (True or False)
         border - print a border around the table (True or False)
-        hrules - controls printing of horizontal rules after rows.  Allowed values: ALL, FRAME, HEADER, NONE
-        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL, NONE
+        hrules - controls printing of horizontal rules after rows.  Allowed values: ALL_VALUES, FRAME, HEADER, NONE
+        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL_VALUES, NONE
         int_format - controls formatting of integer data
         float_format - controls formatting of floating point data
         padding_width - number of spaces on either side of column data (only used if left and right paddings are None)
@@ -1166,8 +1166,8 @@ class PrettyTable(object):
         fields - names of fields (columns) to include
         header - print a header showing field names (True or False)
         border - print a border around the table (True or False)
-        hrules - controls printing of horizontal rules after rows.  Allowed values: ALL, FRAME, HEADER, NONE
-        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL, NONE
+        hrules - controls printing of horizontal rules after rows.  Allowed values: ALL_VALUES, FRAME, HEADER, NONE
+        vrules - controls printing of vertical rules between columns.  Allowed values: FRAME, ALL_VALUES, NONE
         int_format - controls formatting of integer data
         float_format - controls formatting of floating point data
         padding_width - number of spaces on either side of column data (only used if left and right paddings are None)
