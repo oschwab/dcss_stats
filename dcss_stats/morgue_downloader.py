@@ -58,7 +58,6 @@ class DCSSDownloader:
 
     def download(self):
         user = self.user
-        #TODO get new files from offline morgue too
         if not os.path.exists(self.morgue_repo):
             print('Creating ' + self.morgue_repo + 'folder')
             os.mkdir(self.morgue_repo)
@@ -112,8 +111,5 @@ class DCSSDownloader:
         self.onCompleted.fire()
 
 
-# if __name__ == '__main__':
-#     d = DCSSDownloader(server=Server.cpo,user='lepoulpe303',morgue_repo='K:\Perso\dcss\morgue')
-#     d.download()
 
 

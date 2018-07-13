@@ -251,17 +251,20 @@ class Application:
             cmbServer =self.builder.get_object('cmbServer', self.mainwindow)
             lstserver = list(map(str, Server))
             cmbServer.configure(values=lstserver,textvariable=self.selected_server)
+            txtUsername=self.builder.get_object('txtUsername', self.mainwindow)
+            morgueRepository=self.builder.get_object('morgueRepository',self.mainwindow)
+            morgueOffStorage=self.builder.get_object('morgueOffStorage',self.mainwindow)
+
+
 
             def dlgconfig_activate(event):
-                txtUsername=self.builder.get_object('txtUsername', self.mainwindow)
                 set_text(txtUsername,config.user)
-                morgueRepository=self.builder.get_object('morgueRepository',self.mainwindow)
                 set_text(morgueRepository, config.morgue_repository)
-                morgueOffStorage=self.builder.get_object('morgueOffStorage',self.mainwindow)
                 set_text(morgueOffStorage, config.offline_morgue_path)
                 self.selected_server.set(config.server.upper())
 
             def dialog_btsave_clicked():
+                config['user'] = txtUsername.get()
                 '''
                 config.user=
                 config.morgue_repository =
@@ -274,8 +277,6 @@ class Application:
             btnclose = self.builder.get_object('btnSave')
             btnclose['command'] = dialog_btsave_clicked
             self.config_dialog.bind("<Map>", dlgconfig_activate)
-
-            #TODO Load paths from config
 
             dialog.run()
         else:

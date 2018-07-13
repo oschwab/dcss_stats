@@ -4,7 +4,7 @@ this object to store application-wide configuration values.
 """
 
 from re import compile
-from yaml import load, dump, Dumper
+import yaml
 
 from ._logger import logger
 
@@ -42,7 +42,7 @@ class _AttrDict(dict):
         return
 
 
-class YamlConfig(_AttrDict):
+class YamlConfigD(_AttrDict):
     """ Store YAML configuration data.
     Data can be accessed as dict values or object attributes.
     """
@@ -55,8 +55,12 @@ class YamlConfig(_AttrDict):
         return
 
     def save(self,path):
-        r = dump(self,Dumper=Dumper)
-        print(r)
+        d=dict(self)
+        r = yaml.dump(d,Dumper=yaml.Dumper)
+        with open(path, 'w') as file:
+            file.write(r)
+
+
 
     def load(self, path, root=None, params=None):
         """ Load data from YAML configuration files.
@@ -85,8 +89,8 @@ class YamlConfig(_AttrDict):
                 # approach would be to use PyYAML's various hooks to do the
                 # substitution as the file is parsed.
                 logger.info("reading config data from '{:s}'".format(path))
-                yaml = regex.sub(replace, stream.read())
-            data = load(yaml)
+                yamlv = regex.sub(replace, stream.read())
+            data = yaml.load(yamlv)
             try:
                 if root:
                     self.setdefault(root, {}).update(data)
@@ -95,6 +99,30 @@ class YamlConfig(_AttrDict):
             except TypeError:  # data is None
                 logger.warn("config file {:s} is empty".format(path))
         return
+
+class YamlConfig(dict):
+    def load(self, path, root=None, params=None):
+        """ Load data from YAML configuration files.
+        Configuration values are read from a sequence of one or more YAML
+        files. Files are read in the given order, and a duplicate value will
+        overwrite the existing value. If 'root' is specified the config data
+        will be loaded under that attribute instead of the dict root.
+        The optional 'params' argument is a dict-like object to use for
+        parameter substitution in the config files. Any text matching "%key;"
+        will be replaced with the value for 'key' in params.
+        """
+
+
+        with open(path, "r") as stream:
+            logger.info("reading config data from '{:s}'".format(path))
+            data = yaml.load(stream.read())
+        return
+
+    def save(self,path):
+        d=dict(self)
+        r = yaml.dump(d,Dumper=yaml.Dumper)
+        with open(path, 'w') as file:
+            file.write(r)
 
 
 config = YamlConfig()

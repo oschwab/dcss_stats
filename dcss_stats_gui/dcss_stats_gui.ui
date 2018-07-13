@@ -118,7 +118,7 @@
               <property name="weight">1</property>
             </row>
             <row id="2">
-              <property name="weight">0</property>
+              <property name="weight">1</property>
             </row>
           </rows>
           <columns>
@@ -132,7 +132,6 @@
         </layout>
         <child>
           <object class="ttk.Treeview" id="tv">
-            <property name="height">30</property>
             <property name="selectmode">extended</property>
             <property name="yscrollcommand">tvScrollbar.set</property>
             <layout>
@@ -169,7 +168,6 @@
         </child>
         <child>
           <object class="ttk.Treeview" id="tvMsg">
-            <property name="height">10</property>
             <property name="selectmode">extended</property>
             <layout>
               <property name="column">0</property>
