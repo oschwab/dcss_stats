@@ -129,7 +129,7 @@ class GameStats:
         Constructor
         :param morguepath: Path to crawl morgue files (ex: C:\dcss\morgue )
         """
-        self.MorguePath = configuration.morgue_repository
+        self.MorguePath = configuration.get('morgue_repository')
 
 
         self.MorgueFiles = []

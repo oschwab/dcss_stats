@@ -5,7 +5,7 @@ import os
 from dcss_stats.core.dcss_data import jobs,species
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
 
-CONFIG_YML = './config.yml'
+CONFIG_YML = './config.cfg'
 
 try:
     import tkinter as tk  # for python 3
@@ -62,7 +62,10 @@ class Application:
         self.init_morguedl()
 
     def init_morguedl(self):
-        self.dcss_downloader = DCSSDownloader(server=Server[config.server], user=config.user ,morgue_repo=config.morgue_repository,offline_morgue=config.offline_morgue_path)
+        #TODO manage several servers
+        config_server,config_user = config.get_servers().popitem()
+
+        self.dcss_downloader = DCSSDownloader(server=Server[config_server], user=config_user ,morgue_repo=config.get('morgue_repository'),offline_morgue=config.get('offline_morgue_path'))
         self.dcss_downloader.onChange += self.update_download
         self.dcss_downloader.onCompleted += self.download_completed
 
@@ -258,20 +261,25 @@ class Application:
 
 
             def dlgconfig_activate(event):
-                set_text(txtUsername,config.user)
-                set_text(morgueRepository, config.morgue_repository)
-                set_text(morgueOffStorage, config.offline_morgue_path)
-                self.selected_server.set(config.server.upper())
+
+                # TODO manage several servers
+                config_server, config_user = config.get_servers().popitem()
+
+                set_text(txtUsername,config_user)
+                set_text(morgueRepository, config.get('morgue_repository'))
+                set_text(morgueOffStorage, config.get('offline_morgue_path'))
+                self.selected_server.set(config_server)
 
             def dialog_btsave_clicked():
-                config['user'] = txtUsername.get()
+                # TODO manage several servers
+                config.set_servers({txtUsername.get() :self.selected_server.get()})
                 '''
                 config.user=
                 config.morgue_repository =
                 config.offline_morgue_path =
                 config.server =
                 '''
-                config.save(CONFIG_YML)
+                config.save()
                 dialog.close()
 
             btnclose = self.builder.get_object('btnSave')
@@ -307,7 +315,7 @@ class Application:
     def load_config(self):
         f = open("dcss_stats.log", "a", encoding="utf-8")
         config.load(CONFIG_YML)
-        logger.start(config.core.logging, f)
+        logger.start(config.get('logging'), f)
         logger.info("version {}".format(__version__))
 
     def load_data(self):

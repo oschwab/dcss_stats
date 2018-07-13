@@ -8,27 +8,27 @@ from dcss_stats.core.eventhook import EventHook
 
 
 class Server(Enum):
-    cdo = 0
-    cao = auto()
-    cue = auto()
-    cbro = auto()
-    lld = auto()
-    cwz = auto()
-    cxc = auto()
-    cpo = auto()
-    cjr = auto()
+    CDO = 0
+    CAO = auto()
+    CUE = auto()
+    CBRO = auto()
+    LLD = auto()
+    CWZ = auto()
+    CXC = auto()
+    CPO = auto()
+    CJR = auto()
 
     def to_address(self):
         labels = {
-            self.cdo: "crawl.develz.org",
-            self.cao: "crawl.akrasiac.org",
-            self.cue: "underhound.eu",
-            self.cbro: "crawl.beRotato.org",
-            self.lld: "lazy-life.ddo.jp",
-            self.cwz: "webzook.net",
-            self.cxc: "crawl.xtahua.com",
-            self.cpo: "crawl.project357.org",
-            self.cjr: "crawl.jorgrun.rocks"
+            self.CDO: "crawl.develz.org",
+            self.CAO: "crawl.akrasiac.org",
+            self.CUE: "underhound.eu",
+            self.CBRO: "crawl.beRotato.org",
+            self.LLD: "lazy-life.ddo.jp",
+            self.CWZ: "webzook.net",
+            self.CXC: "crawl.xtahua.com",
+            self.CPO: "crawl.project357.org",
+            self.CJR: "crawl.jorgrun.rocks"
         }
         return labels[self]
 
@@ -37,7 +37,7 @@ class Server(Enum):
 
 
 class DCSSDownloader:
-    server=Server.cpo
+    server=Server.CPO
     user=''
     morgue_repo= ''
 
