@@ -1,6 +1,0 @@
-core:
-  logging: DEBUG
-offline_morgue_path: K:\Perso\dcss\morgue
-morgue_repository: K:\Perso\MorgueDCSS
-user: lepoulpe303
-server: CPO

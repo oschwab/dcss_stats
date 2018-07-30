@@ -1,22 +1,20 @@
 import csv
-
 import os
-
 from dcss_stats.core.dcss_data import jobs,species
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
-
-CONFIG_YML = './config.cfg'
+from pathlib import Path
+import pygubu
+from dcss_stats.game_stats import StatColumn,GameStats
+from dcss_stats.core import logger,config
+from dcss_stats import __version__
 
 try:
     import tkinter as tk  # for python 3
 except:
     import Tkinter as tk  # for python 2
-import pygubu
-from dcss_stats.game_stats import StatColumn,GameStats
-from dcss_stats.core import logger,config
-from dcss_stats import __version__
-from tkinter import messagebox
 
+APP_HOME = os.path.join(str(Path.home()),'dcss_stats')
+CONFIG_YML = os.path.join(APP_HOME,'config.cfg')
 
 
 
@@ -59,7 +57,6 @@ class Application:
 
         self.selected_server = tk.StringVar()
         self.init_controls(master)
-        self.init_morguedl()
 
     def init_morguedl(self):
         #TODO manage several servers
@@ -105,6 +102,8 @@ class Application:
             tv.heading(col, text=col, command=lambda _col=col: \
                 self.treeview_sort_column(tv, _col, False))
             tv.column(col, anchor='w', width=100)
+
+        tv.column('#0',width=35)
 
 
         tv.tag_configure('escaped', background='green')
@@ -218,8 +217,13 @@ class Application:
         cmb_spec = self.builder.get_object('lstSpecies', self.master)
 
         spec=self.ALL_VALUES
+
         if (cmb_spec.curselection())!=():
             spec = cmb_spec.get(cmb_spec.curselection())
+
+        if (job==self.ALL_VALUES) or (spec==self.ALL_VALUES):
+            self.current_stat = self.game_stats.Stats
+
         if (job != self.ALL_VALUES):
             self.current_stat = self.game_stats.get_filtered_stat(stat=self.current_stat ,value=job,column=StatColumn.background)
         if (spec != self.ALL_VALUES):
@@ -272,13 +276,9 @@ class Application:
 
             def dialog_btsave_clicked():
                 # TODO manage several servers
-                config.set_servers({txtUsername.get() :self.selected_server.get()})
-                '''
-                config.user=
-                config.morgue_repository =
-                config.offline_morgue_path =
-                config.server =
-                '''
+                config.set_servers({self.selected_server.get():txtUsername.get() })
+                config.set('morgue_repository', morgueRepository.get())
+                config.set('offline_morgue_path', morgueOffStorage.get())
                 config.save()
                 dialog.close()
 
@@ -314,6 +314,20 @@ class Application:
 
     def load_config(self):
         f = open("dcss_stats.log", "a", encoding="utf-8")
+        if not (os.path.exists(CONFIG_YML)):
+            if not (os.path.exists(APP_HOME)):
+                os.makedirs(APP_HOME)
+            config.add_section('settings')
+            morgue_path=os.path.join(APP_HOME,'morgue')
+            if not (os.path.exists(morgue_path)):
+                os.makedirs(morgue_path)
+            config.set('morgue_repository',morgue_path)
+            config.set('offline_morgue_path','')
+            config.set('logging','DEBUG')
+            config.set_servers({})
+            config._CONFIG_FILE = CONFIG_YML
+            config.save()
+
         config.load(CONFIG_YML)
         logger.start(config.get('logging'), f)
         logger.info("version {}".format(__version__))
@@ -335,6 +349,7 @@ class Application:
 
 
     def download_morgue_click(self,event):
+        self.init_morguedl()
         lblstatus =  self.builder.get_object('lblStatus', self.mainwindow)
         lblstatus.configure(text='Downloading...')
         lblstatus.update_idletasks()

@@ -21,6 +21,9 @@ class Config(configparser.RawConfigParser):
     def set_servers(self,servers):
         configparser.RawConfigParser.set(self, 'settings', 'servers',str(servers))
 
+    def set(self,setting,value):
+        configparser.RawConfigParser.set(self,'settings',setting,value)
+
 
 
 config = Config()

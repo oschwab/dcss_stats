@@ -201,7 +201,7 @@
         </layout>
         <child>
           <object class="ttk.Button" id="cmdDownload">
-            <property name="text" translatable="yes">Download Morgue</property>
+            <property name="text" translatable="yes"> Morgue sync</property>
             <layout>
               <property name="column">0</property>
               <property name="propagate">True</property>
