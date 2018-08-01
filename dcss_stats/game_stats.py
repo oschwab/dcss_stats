@@ -38,9 +38,6 @@ class StatColumn(Enum):
     escaped = auto()
     orb=auto()
     runes=auto()
-    sbackground=auto()
-    sspecies = auto()
-
 
 
 
@@ -48,7 +45,6 @@ class StatColumn(Enum):
        labels=  {
            self.dungeon: 'Dungeon',
            self.background: 'Background',
-           self.sbackground: 'Bgrnd',
            self.datestart: 'Start of game',
            self.datedeath: 'Death date',
            self.char_name: 'Name',
@@ -62,7 +58,6 @@ class StatColumn(Enum):
            self.religion_rank: 'Religion rank',
            self.filename: 'Filename',
            self.species: 'Species',
-           self.sspecies: 'Spec.',
            self.version: 'Version',
            self.endgame_cause: 'Endgame cause',
            self.self_kill: 'Self kill',
@@ -164,9 +159,6 @@ class GameStats:
                     logger.error("invalid dungeon+level in " + stat[StatColumn.filename])
                 if stat[StatColumn.endgame_cause].find("cyclops") > 0 or  stat[StatColumn.endgame_cause].startswith("level"):
                     logger.error("invalid endgame_cause in " + stat[StatColumn.filename])
-
-
-
 
             self.current_file=self.current_file+1
             print("{}/{}".format(self.current_file,len(self.MorgueFiles)))
@@ -467,6 +459,7 @@ i       From the stat structure in param , get the count of each possible value 
         # 64 Olivier the Skirmisher (level 3, -1/34 HPs)
         line = line + 2
         curline = morgue[line]
+
         stat[StatColumn.score] = int(curline[:curline.find(' ')])
         stat[StatColumn.char_name] = curline[curline.find(' ') + 1:curline.find('the') - 1]
         stat[StatColumn.surname] = curline[curline.find('the '):curline.find('(') - 1]
@@ -494,10 +487,6 @@ i       From the stat structure in param , get the count of each possible value 
         dateidx=len(linetab)-9
         if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
             stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
-
-        stat[StatColumn.sbackground] = get_short_background(stat[StatColumn.background])
-        stat[StatColumn.sspecies] = get_short_specie(stat[StatColumn.species])
-
 
         # Date
         stat[StatColumn.datestart] = self.convert_date(linetab[7+dateidx] , linetab[6+dateidx] ,linetab[8+dateidx])
@@ -544,7 +533,7 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.escaped] = True
             stat[StatColumn.orb] = True
             linetab = morgue[line + 1].strip().split(' ')
-            stat[StatColumn.runes] = int(linetab[2])
+            #stat[StatColumn.runes] = int(linetab[2])
 
         elif curline.strip().lower().startswith('asphyxiated'):
             stat[StatColumn.endgame_cause] = 'Asphyxiated'
@@ -676,12 +665,31 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.dun_lev] = stat[StatColumn.dun_lev] +":" + stat[StatColumn.dungeon_level]
         # Game duration
         line = 4
+        eof=False
         while not morgue[line].strip().startswith('The game lasted'):
             line = line + 1
+            if (line == len(morgue[line])):
+                eof=True
+                break
 
-        linetab = morgue[line].strip().split(' ')
-        stat[StatColumn.duration] = linetab[3]
-        stat[StatColumn.turns] = linetab[4][1:]
+        if not eof:
+            linetab = morgue[line].strip().split(' ')
+            stat[StatColumn.duration] = linetab[3]
+            stat[StatColumn.turns] = linetab[4][1:]
+
+
+            # runes
+            while not morgue[line].strip().startswith('}:'):
+                line = line + 1
+                if (line == len(morgue)):
+                    eof = True
+                    break
+            if not eof:
+                linetab = morgue[line].strip().split(' ')
+                stat[StatColumn.runes] = int(linetab[1].split('/')[0])
+
+
+
 
         return stat
 

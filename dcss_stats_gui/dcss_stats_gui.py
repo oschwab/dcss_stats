@@ -1,5 +1,6 @@
 import csv
 import os
+
 from dcss_stats.core.dcss_data import jobs,species
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
 from pathlib import Path
@@ -16,8 +17,6 @@ except:
 APP_HOME = os.path.join(str(Path.home()),'dcss_stats')
 CONFIG_YML = os.path.join(APP_HOME,'config.cfg')
 
-
-
 class Application:
 
     ALL_VALUES = '--All'
@@ -31,9 +30,6 @@ class Application:
     config_dialog = None
     matrix_view= None
     master=None
-
-
-
 
     def __init__(self, master):
 
@@ -111,16 +107,12 @@ class Application:
         #
         # Stats treeview
         #
-
         tv_stats = self.builder.get_object('tvMsg', self.mainwindow)
         tv_stats['columns'] = (' ',' ')
-
 
         #
         # Filter
         #
-
-
         cmb_back = self.builder.get_object('lstBackground', master)
         list_jobs = ('--All',) + tuple(sorted(jobs.keys()))
         cmb_back.bind('<<ListboxSelect>>', self.on_back_select)
@@ -149,7 +141,6 @@ class Application:
 
         btnMatrix= self.builder.get_object('cmdMatrix', master)
         btnMatrix.bind("<Button-1>", self.show_matrix_view)
-
 
         #
         # Main window
@@ -242,7 +233,9 @@ class Application:
     def on_tv_doubleclick(self, event):
         tv = self.builder.get_object('tv', self.master)
         item = tv.item(tv.selection()[0])
-        gamefile = os.path.join(config.morgue_repository, item['values'][StatColumn.filename._value_-1])
+        gamefile = os.path.join(config.get('morgue_repository'), item['values'][StatColumn.filename._value_-1])
+        if os.name == 'nt':
+            gamefile='"'+gamefile+'"'
         os.system(gamefile)
 
 
@@ -433,9 +426,6 @@ def set_enabled(childList, enabled):
 def set_text(control,text):
     control.delete(0, tk.END)
     control.insert(0,text)
-
-
-
 
 
 if __name__ == '__main__':
