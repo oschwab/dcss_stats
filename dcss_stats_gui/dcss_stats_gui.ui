@@ -30,19 +30,6 @@
       </columns>
     </layout>
     <child>
-      <object class="ttk.Checkbutton" id="chkfilter">
-        <property name="command">chkfilter_clicked</property>
-        <property name="state">normal</property>
-        <property name="text" translatable="yes">Filter</property>
-        <layout>
-          <property name="column">0</property>
-          <property name="propagate">True</property>
-          <property name="row">0</property>
-          <property name="sticky">nsew</property>
-        </layout>
-      </object>
-    </child>
-    <child>
       <object class="ttk.Labelframe" id="FilterFrame">
         <property name="height">40</property>
         <property name="takefocus">false</property>

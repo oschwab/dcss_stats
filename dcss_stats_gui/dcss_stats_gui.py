@@ -28,7 +28,6 @@ class Application:
     dcss_downloader=None
 
     numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes)
-    chkfilter_state = None
     config_dialog = None
     matrix_view= None
     master=None
@@ -121,9 +120,6 @@ class Application:
         # Filter
         #
 
-        chkfilter = self.builder.get_object('chkfilter', master)
-        self.chkfilter_state = tk.IntVar()
-        chkfilter.configure(command=self.chkfilter_clicked,variable=self.chkfilter_state)
 
         cmb_back = self.builder.get_object('lstBackground', master)
         list_jobs = ('--All',) + tuple(sorted(jobs.keys()))
@@ -405,17 +401,6 @@ class Application:
                 writer.writerow(s.values())
         os.system(filename)
 
-    def chkfilter_clicked(self):
-        chkfilter = self.builder.get_object('chkfilter', self)
-        chkfilter.configure(command=self.chkfilter_clicked)
-
-        framefilter = self.builder.get_object('FilterFrame', self)
-
-        res= self.chkfilter_state.get()
-        if (res==1):
-            set_enabled(framefilter.winfo_children(),True)
-        else:
-            set_enabled(framefilter.winfo_children(),False)
 
     def treeview_sort_column(self,tv, col, reverse):
 

@@ -14,6 +14,7 @@ from .core import logger
 class StatColumn(Enum):
     row_number=0
     dungeon = auto()
+    game_rank = auto()
     game_id=auto()
     background = auto()
     species = auto()
@@ -71,7 +72,8 @@ class StatColumn(Enum):
            self.orb: 'Orb',
            self.runes: 'Runes',
            self.row_number: '#',
-           self.game_id: 'Game number'
+           self.game_id: 'Game number',
+           self.game_rank: 'Overall rank'
 
                    }
        if self in labels.keys():
@@ -184,6 +186,10 @@ class GameStats:
         # sort by score
         #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
         self.Stats = self.sort_stat(StatColumn.score,True)
+        idx=0
+        for s in self.Stats:
+            idx=idx+1
+            s[StatColumn.game_rank] = idx
 
 
 
