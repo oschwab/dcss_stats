@@ -643,6 +643,14 @@ i       From the stat structure in param , get the count of each possible value 
                     # in an ice cave
                         stat[StatColumn.dungeon_level] ="n/a"
                         stat[StatColumn.dungeon] = "ice cave"
+                    elif linetab[3]=="desolation":
+                        # desolation of salt
+                        stat[StatColumn.dungeon_level] ="n/a"
+                        stat[StatColumn.dungeon] = "Desolation of Salt"
+                    elif linetab[3]=="labyrinth":
+                        # desolation of salt
+                        stat[StatColumn.dungeon_level] ="n/a"
+                        stat[StatColumn.dungeon] = "labyrinth"
                     elif linetab[3] == "ecumenical":
                         # Quit on Treasure trove
                         stat[StatColumn.dungeon_level] = "n/a"
@@ -656,6 +664,10 @@ i       From the stat structure in param , get the count of each possible value 
                 else:
                     stat[StatColumn.dungeon] = linetab[3]
                     stat[StatColumn.dungeon_level] = 'n/a'
+
+                stat[StatColumn.dungeon] = stat[StatColumn.dungeon][0].upper() + stat[StatColumn.dungeon][1:]
+
+
 
             if stat[StatColumn.dungeon].endswith('.'):
                 stat[StatColumn.dungeon] = stat[StatColumn.dungeon][:-1]
