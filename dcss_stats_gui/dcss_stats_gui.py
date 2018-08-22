@@ -69,10 +69,13 @@ class Application:
             sb = [s[x] for x in self.displayed_cols]
             sb.remove(s[StatColumn.row_number])
             gn = s[StatColumn.row_number]
+            ttags=()
             if ((s[StatColumn.escaped]) and (s[StatColumn.orb]) ):
-                ttags=('escaped',)
+                ttags= ttags + ('escaped',)
+
             else:
-                ttags=()
+                if (s[StatColumn.runes])>0:
+                    ttags=('runes'+str(s[StatColumn.runes]),)
             tv.insert('', 'end', text=str(gn), values=tuple(sb),tags=ttags)
 
     def init_controls(self, master):
