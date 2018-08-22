@@ -62,15 +62,14 @@ class DCSSDownloader:
             print('Creating ' + self.morgue_repo + 'folder')
             os.mkdir(self.morgue_repo)
 
-        src_files = os.listdir(self.offline_morgue)
-        for file_name in src_files:
-            full_file_name = os.path.join(self.offline_morgue, file_name)
-            dest_file_name = os.path.join(self.morgue_repo, file_name)
+        if os.path.exists(self.offline_morgue):
+            src_files = os.listdir(self.offline_morgue)
+            for file_name in src_files:
+                full_file_name = os.path.join(self.offline_morgue, file_name)
+                dest_file_name = os.path.join(self.morgue_repo, file_name)
 
-            if (os.path.isfile(full_file_name)  and not os.path.exists(dest_file_name) ) :
-                shutil.copy(full_file_name, self.morgue_repo)
-
-
+                if (os.path.isfile(full_file_name)  and not os.path.exists(dest_file_name) ) :
+                    shutil.copy(full_file_name, self.morgue_repo)
 
         url = "https://" + self.server.to_address() + "/morgue/" + user + "/"
         print("URL=" + url)
