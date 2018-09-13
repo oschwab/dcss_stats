@@ -227,6 +227,26 @@
             </layout>
           </object>
         </child>
+        <child>
+          <object class="ttk.Menubutton" id="mnubtnGraph">
+            <property name="text" translatable="yes">Graphs</property>
+            <layout>
+              <property name="column">4</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+            <child>
+              <object class="tk.Menu" id="mnuGraph">
+                <child>
+                  <object class="tk.Menuitem.Command" id="cmdGraphAvgScoreMonth">
+                    <property name="command_id_arg">false</property>
+                    <property name="label" translatable="yes">Average score per month</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>

@@ -8,6 +8,7 @@ import pygubu
 from dcss_stats.game_stats import StatColumn,GameStats
 from dcss_stats.core import logger,config
 from dcss_stats import __version__
+import datetime
 
 try:
     import tkinter as tk  # for python 3
@@ -231,6 +232,8 @@ class Application:
         tv_stats.delete(*tv_stats.get_children())
         tv_stats.insert('', 'end', text='Number of games:', values=(len(self.current_stat),))
         tv_stats.insert('', 'end', text='Average score:', values=(self.game_stats.get_averagescore(self.current_stat),))
+        total_play_time =  str(datetime.timedelta(seconds=self.game_stats.get_playtime(self.current_stat)))
+        tv_stats.insert('', 'end', text='Total play time', values=(total_play_time,))
 
 
     def on_tv_doubleclick(self, event):

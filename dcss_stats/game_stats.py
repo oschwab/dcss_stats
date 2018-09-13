@@ -382,6 +382,24 @@ i       From the stat structure in param , get the count of each possible value 
                 bestgame = s
         return bestgame[StatColumn.score]
 
+    def get_playtime(self, stat=None):
+        """
+        returns the total play time
+        :param stat: the stat structure ; if None global one is taken
+        :return: the total time (in minutes)
+        """
+        if stat is None:
+            stat = self.Stats
+        ttpt = 0
+        if len(stat) == 0:
+            return 0
+        for s in stat:
+            d=s[StatColumn.duration]
+            ttpt = ttpt + int(d[-2:]) + int(d[-5:-3]) * 60 + int(d[:2]) * 60 * 60
+
+
+        return(ttpt)
+
     def get_averagescore(self, stat=None):
         """
         returns the average score
