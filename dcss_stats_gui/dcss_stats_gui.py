@@ -6,14 +6,19 @@ from dcss_stats.morgue_downloader import DCSSDownloader,Server
 from pathlib import Path
 import pygubu
 from dcss_stats.game_stats import StatColumn,GameStats
-from dcss_stats.core import logger,config
+from dcss_stats.core import logger,config,utils
 from dcss_stats import __version__
 import datetime
+import leather
+import mmap
+
 
 try:
-    import tkinter as tk  # for python 3
+    import tkinter as tk
+    from tkinter import messagebox
 except:
-    import Tkinter as tk  # for python 2
+    import Tkinter as tk
+    import tkMessageBox as messagebox
 
 APP_HOME = os.path.join(str(Path.home()),'dcss_stats')
 CONFIG_YML = os.path.join(APP_HOME,'config.cfg')
@@ -40,7 +45,7 @@ class Application:
 
         #2: Load an ui file
         builder.add_from_file('dcss_stats_gui.ui')
-        builder.connect_callbacks(self)
+
         #3: Create the widget using a master as parent
         self.mainwindow = builder.get_object('mainframe', master)
         self.mainwindow.pack(expand=True, fill="both")
@@ -53,6 +58,8 @@ class Application:
 
         self.selected_server = tk.StringVar()
         self.init_controls(master)
+        builder.connect_callbacks(self)
+
 
     def init_morguedl(self):
         #TODO manage several servers
@@ -151,6 +158,18 @@ class Application:
         #
         self.mainwindow.bind("<Map>",self.mainwindow_activate)
 
+
+
+    def on_btnfilter_click(self):
+        self.apply_filter()
+
+
+    def on_avgscoremonth_clicked(self):
+        chart = leather.Chart('Average score per month')
+#        chart.add_dots(data)
+#        chart.to_svg('examples/charts/simple_pairs.svg')
+
+
     def on_back_select(self,event):
         w = event.widget
         index = int(w.curselection()[0])
@@ -173,7 +192,6 @@ class Application:
             cmb_spec.insert(tk.END, item)
             if (item==save_val):
                 cmb_spec.selection_set(tk.END)
-        self.apply_filter()
 
     def on_job_select(self,event):
         w = event.widget
@@ -197,7 +215,6 @@ class Application:
             cmb_job.insert(tk.END, item)
             if (item==save_val):
                 cmb_job.selection_set(tk.END)
-        self.apply_filter()
 
     def apply_filter(self):
         cmb_job = self.builder.get_object('lstBackground', self.master)
@@ -219,8 +236,38 @@ class Application:
             self.current_stat = self.game_stats.get_filtered_stat(stat=self.current_stat ,value=job,column=StatColumn.background)
         if (spec != self.ALL_VALUES):
             self.current_stat = self.game_stats.get_filtered_stat(stat=self.current_stat ,value=spec,column=StatColumn.species)
+
+
+        txtWordFilter = self.builder.get_object('txtWordFilter', self.master)
+        regex = self.builder.tkvariables.__getitem__('RegexVar').get()
+
+        txt_filter = txtWordFilter.get(1.0, tk.END)
+        if (len(txt_filter)>0):
+            if (txt_filter[-1:]=='\n'):
+                txt_filter = txt_filter[:-1]
+            self.current_stat = self.apply_text_filter(self.current_stat,txt_filter,regex==1)
+
+
+
+
         self.display_data()
 
+
+
+    def apply_text_filter(self,stat,filter,regex):
+        retstat = []
+        filt=bytearray(filter,'utf-8')
+        for st in stat:
+            filename=os.path.join(config.get('morgue_repository'), st[StatColumn.filename])
+            if utils.file_contains(filename,filter,regex):
+                retstat.append(st)
+
+
+            # with open(filename ,'rb', 0) as file, \
+            #         mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ) as s:
+            #     if s.find(filt) != -1:
+            #        retstat.append(st)
+        return retstat
 
     def display_data(self):
         self.fill_treeview()

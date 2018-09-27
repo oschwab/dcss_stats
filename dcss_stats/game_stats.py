@@ -438,7 +438,24 @@ i       From the stat structure in param , get the count of each possible value 
 
         return ret
 
+    def get_avg_score_per_month(self,stat=None):
+        if stat is None:
+            stat = self.Stats
+        evol={}
 
+        filter="%y-%m"
+
+        for s in stat:
+            key=s[StatColumn.datestart].strftime(filter)
+            if not key in evol:
+                evol[key]=[]
+            evol[key].append(s[StatColumn.score])
+
+        ret=[]
+        for key, value in sorted(evol.items()):
+            ret.append([key,int(sum(value)/len(value))])
+
+        return ret
 
 
     def get_information(self, morgue,morguefile):
