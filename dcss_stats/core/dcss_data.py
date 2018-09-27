@@ -1,3 +1,7 @@
+#
+#crawl-ref/source/job-data.h
+#
+
 
 jobs={
 "Abyssal Knight" : "AK",
@@ -31,6 +35,9 @@ jobs={
 "Stalker" : "St"
 }
 
+#
+# crawl-ref/source/species-data.h
+#
 species={
 "Centaur": "Ce",
 "Deep Dwarf": "DD",
@@ -70,6 +77,41 @@ species={
 "Sludge Elf": "SE",
 "Lava Orc": "LO",
 "Djinni": "Dj"
+}
+
+#
+# /crawl-ref/source/god-type.h
+#
+
+gods={
+
+    "Zin",
+    "Shining One",
+    "Kikubaaqudgha",
+    "Yredelemnul",
+    "Xom",
+    "Vehumet",
+    "Okawaru",
+    "Makhleb",
+    "Sif muna",
+    "Trog",
+    "Nemelex Xobeh",
+    "Elyvilon",
+    "Lugonu",
+    "Beogh",
+    "Jiyva",
+    "Fedhas",
+    "Cheibriados",
+    "Ashenzari",
+    "Dithmenos",
+    "Gozag",
+    "Qazlal",
+    "Ru",
+    "Pakellas",
+    "Uskayaw",
+    "Hepliaklqana",
+    "Wu Jian"
+
 }
 
 
