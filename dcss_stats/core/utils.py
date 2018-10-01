@@ -1,16 +1,14 @@
 
 import itertools
 import re
+import os
 
 
 def file_contains(filename, filter,regex=False):
     '''Determine whether a file contains a string.'''
     if '20180920-115550' in filename:
         a=5
-        b=2
 
-
-    #filter=filter.encode('string-escape')
     if not regex:
         filter=filter.lower()
     with open(filename) as f:
@@ -22,3 +20,9 @@ def file_contains(filename, filter,regex=False):
                 if re.search(filter, line):
                     return filename, num, line
     return False
+
+def open_morguefile(config,filename):
+        gamefile = os.path.join(config.get('morgue_repository'), filename )
+        if os.name == 'nt':
+            gamefile = '"' + gamefile + '"'
+        os.system(gamefile)

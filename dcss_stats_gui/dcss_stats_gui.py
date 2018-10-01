@@ -245,29 +245,10 @@ class Application:
         if (len(txt_filter)>0):
             if (txt_filter[-1:]=='\n'):
                 txt_filter = txt_filter[:-1]
-            self.current_stat = self.apply_text_filter(self.current_stat,txt_filter,regex==1)
-
-
-
+            self.current_stat = self.game_stats.apply_text_filter(txt_filter,regex==1,config,self.current_stat)
 
         self.display_data()
 
-
-
-    def apply_text_filter(self,stat,filter,regex):
-        retstat = []
-        filt=bytearray(filter,'utf-8')
-        for st in stat:
-            filename=os.path.join(config.get('morgue_repository'), st[StatColumn.filename])
-            if utils.file_contains(filename,filter,regex):
-                retstat.append(st)
-
-
-            # with open(filename ,'rb', 0) as file, \
-            #         mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ) as s:
-            #     if s.find(filt) != -1:
-            #        retstat.append(st)
-        return retstat
 
     def display_data(self):
         self.fill_treeview()
@@ -286,10 +267,9 @@ class Application:
     def on_tv_doubleclick(self, event):
         tv = self.builder.get_object('tv', self.master)
         item = tv.item(tv.selection()[0])
-        gamefile = os.path.join(config.get('morgue_repository'), item['values'][StatColumn.filename._value_-1])
-        if os.name == 'nt':
-            gamefile='"'+gamefile+'"'
-        os.system(gamefile)
+        filename=item['values'][StatColumn.filename._value_ - 1]
+        utils.open_morguefile(config,filename)
+
 
 
     def show_config_dialog(self,event):

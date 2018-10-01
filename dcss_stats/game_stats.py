@@ -7,7 +7,7 @@ from os.path import isfile, join, exists
 
 from dcss_stats.core.dcss_data import get_short_background, get_short_specie
 from dcss_stats.core.eventhook import EventHook
-from .core import logger
+from .core import logger,utils
 
 
 
@@ -456,6 +456,16 @@ i       From the stat structure in param , get the count of each possible value 
             ret.append([key,int(sum(value)/len(value))])
 
         return ret
+
+    def apply_text_filter(self,filter,regex,config,stat=None):
+        if stat is None:
+            stat = self.Stats
+        retstat = []
+        for st in stat:
+            filename=join(config.get('morgue_repository'), st[StatColumn.filename])
+            if utils.file_contains(filename,filter,regex):
+                retstat.append(st)
+        return retstat
 
 
     def get_information(self, morgue,morguefile):
