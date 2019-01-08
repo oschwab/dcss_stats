@@ -164,6 +164,10 @@ class GameStats:
             print("{}/{}".format(self.current_file,len(self.MorgueFiles)))
             self.onChange.fire()
 
+            # if (self.current_file >10):
+            #     print('/!\ DEBUG STOP')
+            #     break
+
 
         # Finally, sort and number the games
 
