@@ -32,7 +32,7 @@ class Application:
     filtered = False
     dcss_downloader=None
 
-    numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes)
+    numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes,StatColumn.game_rank)
     config_dialog = None
     matrix_view= None
     master=None

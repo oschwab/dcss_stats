@@ -504,7 +504,10 @@ i       From the stat structure in param , get the count of each possible value 
         # Score & main Stats
         # example string :
         # 64 Olivier the Skirmisher (level 3, -1/34 HPs)
-        line = line + 2
+
+        line = line + 1
+        while (not morgue[line][0].isdigit()):
+            line = line + 1
         curline = morgue[line]
 
         stat[StatColumn.score] = int(curline[:curline.find(' ')])
