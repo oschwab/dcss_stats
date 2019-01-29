@@ -168,7 +168,6 @@ class GameStats:
         # Finally, sort and number the games
 
         # sort by date
-        #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.datedeath), reverse=False)
         self.Stats = self.sort_stat(StatColumn.datedeath)
         self.current_file=0
         for s in self.Stats:
@@ -176,7 +175,6 @@ class GameStats:
             s[StatColumn.game_id] = self.current_file
 
         # sort by score
-        #self.Stats = sorted(self.Stats, key=operator.itemgetter(StatColumn.score), reverse=True)
         self.Stats = self.sort_stat(StatColumn.score,True)
         idx=0
         for s in self.Stats:
@@ -502,7 +500,10 @@ i       From the stat structure in param , get the count of each possible value 
         # Score & main Stats
         # example string :
         # 64 Olivier the Skirmisher (level 3, -1/34 HPs)
-        line = line + 2
+
+        line = line + 1
+        while (not morgue[line][0].isdigit()):
+            line = line + 1
         curline = morgue[line]
 
         stat[StatColumn.score] = int(curline[:curline.find(' ')])
