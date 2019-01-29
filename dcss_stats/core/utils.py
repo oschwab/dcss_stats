@@ -26,3 +26,22 @@ def open_morguefile(config,filename):
         if os.name == 'nt':
             gamefile = '"' + gamefile + '"'
         os.system(gamefile)
+
+
+def load_config(config,CONFIG_YML,APP_HOME):
+
+    if not (os.path.exists(CONFIG_YML)):
+        if not (os.path.exists(APP_HOME)):
+            os.makedirs(APP_HOME)
+        config.add_section('settings')
+        morgue_path = os.path.join(APP_HOME, 'morgue')
+        if not (os.path.exists(morgue_path)):
+            os.makedirs(morgue_path)
+        config.set('morgue_repository', morgue_path)
+        config.set('offline_morgue_path', '')
+        config.set('logging', 'DEBUG')
+        config.set_servers({})
+        config._CONFIG_FILE = CONFIG_YML
+        config.save()
+
+    config.load(CONFIG_YML)

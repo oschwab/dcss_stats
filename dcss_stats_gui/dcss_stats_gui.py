@@ -32,10 +32,11 @@ class Application:
     filtered = False
     dcss_downloader=None
 
-    numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes)
+    numeric_cols=(StatColumn.row_number, StatColumn.game_id, StatColumn.hp, StatColumn.turns, StatColumn.score, StatColumn.runes,StatColumn.game_rank)
     config_dialog = None
     matrix_view= None
     master=None
+    great_total=-1
 
     def __init__(self, master):
 
@@ -63,9 +64,9 @@ class Application:
 
     def init_morguedl(self):
         #TODO manage several servers
-        config_server,config_user = config.get_servers().popitem()
+        config_server = config.get_servers()
 
-        self.dcss_downloader = DCSSDownloader(server=Server[config_server], user=config_user ,morgue_repo=config.get('morgue_repository'),offline_morgue=config.get('offline_morgue_path'))
+        self.dcss_downloader = DCSSDownloader(servers=config_server ,morgue_repo=config.get('morgue_repository'),offline_morgue=config.get('offline_morgue_path'))
         self.dcss_downloader.onChange += self.update_download
         self.dcss_downloader.onCompleted += self.download_completed
 
@@ -262,6 +263,10 @@ class Application:
         tv_stats.insert('', 'end', text='Average score:', values=(self.game_stats.get_averagescore(self.current_stat),))
         total_play_time =  str(datetime.timedelta(seconds=self.game_stats.get_playtime(self.current_stat)))
         tv_stats.insert('', 'end', text='Total play time', values=(total_play_time,))
+        pc_total=(len(self.current_stat)  * 100) / self.great_total
+        tv_stats.insert('', 'end', text='% of total', values=(pc_total,))
+
+
 
 
     def on_tv_doubleclick(self, event):
@@ -314,8 +319,20 @@ class Application:
 
     def show_matrix_view(self, event):
         self.matrix_view= self.builder.get_object('frameMatrix', self.mainwindow)
-        self.matrix_view.width = 100
-        self.matrix_view.height = 500
+
+        # get screen width and height
+        ws = root.winfo_screenwidth()  # width of the screen
+        hs = root.winfo_screenheight()  # height of the screen
+
+
+        # set the dimensions of the screen
+        # and where it is placed
+        self.matrix_view.top=0
+        self.matrix_view.left=0
+        self.matrix_view.width=ws
+        self.matrix_view.height=hs
+
+
         tv = self.builder.get_object('tvMatrix', self.matrix_view)
 
         sb = self.builder.get_object('Scrollbar_v', self.master)
@@ -363,6 +380,7 @@ class Application:
         self.game_stats.onCompleted += self.loaddata_oncompleted
         self.game_stats.analyze()
         self.current_stat = self.game_stats.Stats
+        self.great_total = len(self.game_stats.Stats)
 
 
     def mainwindow_activate(self,event):
