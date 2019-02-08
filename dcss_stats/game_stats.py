@@ -243,12 +243,15 @@ class GameStats:
 
         return len(stat)
 
-    def get_char_filtered_stat(self, character):
+    def get_char_filtered_stat(self, character, stat=None):
         """
         returns a stat structure filtered for character
         :param character: the character (race+job) to filter
         :return: stat structure
         """
+        if stat is None:
+            stat = self.Stats
+
         filtstat = []
         for s in self.Stats:
             sb = s[StatColumn.species] + ' ' + s[StatColumn.background]
@@ -276,6 +279,26 @@ class GameStats:
                 filtstat.append(s)
         return filtstat
 
+    def get_char_filtered_stat(self, background,species,stat=None):
+        """
+
+        :param stat:
+        :param value:
+        :param background:
+        :param species:
+        :return:
+        """
+        if stat is None:
+            stat = self.Stats
+
+        filtstat = []
+        rowid=0
+        for s in stat:
+            if (s[StatColumn.background] == background) and (s[StatColumn.species] == species)  :
+                rowid=rowid+1
+                s[StatColumn.row_number] = rowid
+                filtstat.append(s)
+        return filtstat
 
     def get_average_score(self,stat=None):
         if stat is None:
@@ -300,14 +323,13 @@ class GameStats:
 
 
     def get_character_list(self):
-
         """
         Get the list of characters types (race+job) found in morgue
         :return: a . list . of . characters
         """
         list_char = []
         for s in self.Stats:
-            sb = s[StatColumn.species] + ' ' + s[StatColumn.background]
+            sb = (s[StatColumn.species] ,s[StatColumn.background])
             if sb not in list_char:
                 list_char.append(sb)
 
@@ -524,17 +546,30 @@ i       From the stat structure in param , get the count of each possible value 
         curline = morgue[line]
         linetab = curline.strip().split(' ')
         stat[StatColumn.species] = linetab[3]
+        idx_on = 5
         if stat[StatColumn.species] in ["High","Dark","Deep","Hill","Vine"]:
         # High Elf
             stat[StatColumn.species] = stat[StatColumn.species] +" "+ linetab[4]
             stat[StatColumn.background] = linetab[5]
+            idx_on = idx_on + 1
+            if linetab[6] != "on":
+                # ... Elementalist
+                stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[6]
+                idx_on = idx_on + 1
         else:
             stat[StatColumn.background] = linetab[4]
-        dateidx=len(linetab)-9
-        if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
-            stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
+        if linetab[idx_on] != "on":
+            stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[idx_on]
+
+
+
+        # if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
+        #      stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
+
+
 
         # Date
+        dateidx = len(linetab) - 9
         stat[StatColumn.datestart] = self.convert_date(linetab[7+dateidx] , linetab[6+dateidx] ,linetab[8+dateidx])
 
 

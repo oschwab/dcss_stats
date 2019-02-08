@@ -1,8 +1,7 @@
 import csv
 import os
 
-from dcss_stats.core.dcss_data import jobs,species
-from dcss_stats.morgue_downloader import DCSSDownloader,Server
+from dcss_stats.core.dcss_data import jobs,species,get_short_specie,get_short_background
 from pathlib import Path
 import pygubu
 from dcss_stats.game_stats import StatColumn,GameStats
@@ -121,6 +120,13 @@ class Application:
         #
         tv_stats = self.builder.get_object('tvMsg', self.mainwindow)
         tv_stats['columns'] = (' ',' ')
+
+        #
+        # Char stats treeview
+        #
+        tv_char = self.builder.get_object('tvChar', self.mainwindow)
+        tv_char['columns'] = ('Character','Games','Wins','Avg score')
+
 
         #
         # Filter
@@ -254,6 +260,7 @@ class Application:
     def display_data(self):
         self.fill_treeview()
         self.fill_stats()
+        self.fill_char_stats()
 
     def fill_stats(self):
         tv_stats = self.builder.get_object('tvMsg', self.mainwindow)
@@ -265,6 +272,21 @@ class Application:
         tv_stats.insert('', 'end', text='Total play time', values=(total_play_time,))
         pc_total=(len(self.current_stat)  * 100) / self.great_total
         tv_stats.insert('', 'end', text='% of total', values=(pc_total,))
+
+    def fill_char_stats(self):
+        tv_char = self.builder.get_object('tvChar', self.mainwindow)
+        tv_char.delete(*tv_char.get_children())
+
+        list_char = self.game_stats.get_character_list()
+
+
+        for char in list_char:
+            short_char= get_short_specie(char[0]) + get_short_background(char[1])
+            char_stat = self.game_stats.get_char_filtered_stat(char[1],char[0], stat=self.current_stat)
+            sb = len(char_stat)
+
+            tv_char.insert('', 'end', text=str(short_char), values=(sb,))
+
 
 
 

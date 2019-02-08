@@ -6,9 +6,6 @@ import os
 
 def file_contains(filename, filter,regex=False):
     '''Determine whether a file contains a string.'''
-    if '20180920-115550' in filename:
-        a=5
-
     if not regex:
         filter=filter.lower()
     with open(filename) as f:

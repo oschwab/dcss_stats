@@ -80,42 +80,42 @@ class DCSSDownloader:
                 os.mkdir(self.morgue_repo)
 
             url = "https://" + server_enum.to_address() + "/"+ server_enum.get_morgue()  +"/" + user + "/"
-        print("URL=" + url)
-        response = urllib.request.urlopen(url)
-        data = response.read()
-        text = data.decode('utf-8')
-            text = str.replace(text,"<td","\n<td")
-        lines=text.splitlines()
-
-        files = []
-        for l in lines:
-                if l.find('<a href')!=-1 :
-                    file_link = l[l.find('<a href'):l.find('</a')]
-                    file=file_link.split('>')[1]
-                ext = file[-4:]
-                #TODO see what are other extension for ..
-                #if (ext in ['.txt','.lst','.map']):
-                if (ext in ['.txt']):
-                    files.append(file)
-
-        for dirname, dirnames, filenames in os.walk(self.morgue_repo):
-            for filename in filenames:
-                if filename in files:
-                    files.remove(filename)
-        self.nb_files = len(files)
-        print(str(self.nb_files)+ " files to download")
-
-        self.nb_downloaded = 0
-        for file_to_dl in files:
-                url = "https://" + server_enum.to_address() + "/"+ server_enum.get_morgue()  +"/"  + user + "/" + file_to_dl
             print("URL=" + url)
             response = urllib.request.urlopen(url)
             data = response.read()
             text = data.decode('utf-8')
-            with open(os.path.join(self.morgue_repo, file_to_dl), "w", encoding='utf-8') as text_file:
-                text_file.write(text)
-            self.nb_downloaded = self.nb_downloaded+1
-            self.onChange.fire()
+            text = str.replace(text,"<td","\n<td")
+            lines=text.splitlines()
+
+            files = []
+            for l in lines:
+                if l.find('<a href')!=-1 :
+                    file_link = l[l.find('<a href'):l.find('</a')]
+                    file=file_link.split('>')[1]
+                    ext = file[-4:]
+                    #TODO see what are other extension for ..
+                    #if (ext in ['.txt','.lst','.map']):
+                    if (ext in ['.txt']):
+                        files.append(file)
+
+            for dirname, dirnames, filenames in os.walk(self.morgue_repo):
+                for filename in filenames:
+                    if filename in files:
+                        files.remove(filename)
+            self.nb_files = len(files)
+            print(str(self.nb_files)+ " files to download")
+
+            self.nb_downloaded = 0
+            for file_to_dl in files:
+                url = "https://" + server_enum.to_address() + "/"+ server_enum.get_morgue()  +"/"  + user + "/" + file_to_dl
+                print("URL=" + url)
+                response = urllib.request.urlopen(url)
+                data = response.read()
+                text = data.decode('utf-8')
+                with open(os.path.join(self.morgue_repo, file_to_dl), "w", encoding='utf-8') as text_file:
+                    text_file.write(text)
+                self.nb_downloaded = self.nb_downloaded+1
+                self.onChange.fire()
         self.onCompleted.fire()
 
 

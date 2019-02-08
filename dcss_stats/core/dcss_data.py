@@ -33,12 +33,14 @@ jobs={
 "Jester" : "Jr",
 "Priest" : "Pr",
 "Stalker" : "St"
+
 }
 
 #
 # crawl-ref/source/species-data.h
 #
 species={
+"Barachi" : "Ba",
 "Centaur": "Ce",
 "Deep Dwarf": "DD",
 "Deep Elf": "DE",
@@ -128,6 +130,15 @@ def get_short_specie(string):
 def get_short_background(string):
     return jobs[string]
 
+def get_long_specie(string):
+    for lg_spec,spec in species.items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+        if spec == string:
+            return lg_spec
+
+def get_long_background(string):
+    for lg_back,back in jobs.items():  # for name, age in dictionary.iteritems():  (for Python 2.x)
+        if back == string:
+            return lg_back
 
 def validate_class_background(string):
     if (len(string)==2):
