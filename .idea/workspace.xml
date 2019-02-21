@@ -3,12 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="383173d2-35c2-441f-b5af-8a2dee079cb5" name="Default" comment="Added text search in morgue files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcss_stats/core/dcss_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats/core/dcss_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcss_stats/core/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats/core/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dcss_stats/game_stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats/game_stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcss_stats/morgue_downloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats/morgue_downloader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.ui" afterDir="false" />
     </list>
     <ignored path="dcss_stats_cli/game_stats.txt" />
     <ignored path="dcss_stats_cli/scorevol.csv" />
@@ -22,23 +18,23 @@
     <session id="1257574882">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="11" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="4" />
           <entry key="project.open.time.16" value="1" />
-          <entry key="project.open.time.17" value="2" />
+          <entry key="project.open.time.17" value="3" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.34" value="1" />
-          <entry key="project.opened" value="13" />
+          <entry key="project.opened" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="334" />
-          <entry key="py" value="1958" />
+          <entry key="py" value="2290" />
           <entry key="txt" value="59" />
           <entry key="ui" value="151" />
         </counts>
@@ -46,13 +42,13 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="59" />
-          <entry key="Python" value="2292" />
+          <entry key="Python" value="2624" />
           <entry key="Qt UI file" value="151" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="9" />
+          <entry key="py" value="10" />
           <entry key="txt" value="3" />
           <entry key="ui" value="2" />
         </counts>
@@ -60,7 +56,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="9" />
+          <entry key="Python" value="10" />
           <entry key="Qt UI file" value="2" />
         </counts>
       </usages-collector>
@@ -74,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1989">
-              <caret line="128" selection-start-line="128" selection-end-line="128" />
+            <state relative-caret-position="307">
+              <caret line="276" column="87" selection-start-line="276" selection-start-column="87" selection-end-line="276" selection-end-column="87" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -83,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://C:/Tools/Python36/Lib/configparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="1051" column="71" selection-start-line="1051" selection-start-column="71" selection-end-line="1051" selection-end-column="71" />
+            <state relative-caret-position="17901">
+              <caret line="1061" column="48" selection-start-line="1061" selection-start-column="48" selection-end-line="1061" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -116,8 +112,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dcss_stats/morgue_downloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1377">
-              <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
+            <state relative-caret-position="442">
+              <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -126,7 +122,7 @@
         <entry file="file://$PROJECT_DIR$/dcss_stats/core/dcss_data.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="578">
-              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+              <caret line="130" selection-start-line="130" selection-end-line="130" />
             </state>
           </provider>
         </entry>
@@ -140,11 +136,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9197">
-              <caret line="549" selection-start-line="549" selection-end-line="549" />
+            <state relative-caret-position="454">
+              <caret line="456" lean-forward="true" selection-start-line="456" selection-end-line="456" />
               <folding>
                 <element signature="e#1#16#0" expanded="true" />
               </folding>
@@ -189,6 +185,8 @@
       <find>chk</find>
       <find>get_short_specie</find>
       <find>get_character_list</find>
+      <find>self.stats</find>
+      <find>numeric_cols</find>
     </findStrings>
     <replaceStrings>
       <replace>output.write_line</replace>
@@ -247,9 +245,9 @@
         <option value="$PROJECT_DIR$/dcss_stats/core/utils.py" />
         <option value="$PROJECT_DIR$/dcss_stats/morgue_downloader.py" />
         <option value="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.ui" />
-        <option value="$PROJECT_DIR$/dcss_stats/game_stats.py" />
         <option value="$PROJECT_DIR$/dcss_stats/core/dcss_data.py" />
         <option value="$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py" />
+        <option value="$PROJECT_DIR$/dcss_stats/game_stats.py" />
       </list>
     </option>
   </component>
@@ -283,6 +281,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -321,7 +320,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -519,6 +517,9 @@
         <item itemvalue="Python.morgue_downloader" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -781,19 +782,19 @@
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49856323" visible="true" weight="0.12170706" />
-      <window_info id="Structure" order="1" weight="0.28872496" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49856323" weight="0.12170706" />
+      <window_info active="true" id="Structure" order="1" visible="true" weight="0.28872496" />
       <window_info id="Favorites" order="2" sideWeight="0.50143677" side_tool="true" weight="0.12170706" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.47654584" weight="0.32903227" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49051633" visible="true" weight="0.2532189" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.3561644" weight="0.25751072" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.47629082" weight="0.32832617" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4873551" visible="true" weight="0.2532189" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.35458377" weight="0.25751072" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4936034" weight="0.32903227" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5094837" side_tool="true" visible="true" weight="0.2532189" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5126449" side_tool="true" visible="true" weight="0.2532189" />
       <window_info anchor="bottom" id="Messages" order="8" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4910432" weight="0.32832617" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49051633" weight="0.32832617" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.48261327" weight="0.32832617" />
       <window_info anchor="bottom" id="Python Console" order="11" sideWeight="0.6865121" weight="0.32832617" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -895,13 +896,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/dcss_stats/core/dcss_data.py</url>
-          <line>130</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -1051,13 +1045,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/dcss_stats_cli.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="109" column="10" selection-start-line="109" selection-start-column="10" selection-end-line="109" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dcss_stats_cli/config.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1154,13 +1141,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py">
+    <entry file="file://$PROJECT_DIR$/dcss_stats_cli/dcss_stats_cli.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1989">
-          <caret line="128" selection-start-line="128" selection-end-line="128" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="238">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Tools/Python36/Lib/configparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17901">
+          <caret line="1061" column="48" selection-start-line="1061" selection-start-column="48" selection-end-line="1061" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -1181,20 +1172,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats/morgue_downloader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1377">
-          <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats/core/dcss_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Tools/Python36/Lib/tkinter/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="28832">
@@ -1202,20 +1179,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
+    <entry file="file://$PROJECT_DIR$/dcss_stats/morgue_downloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9197">
-          <caret line="549" selection-start-line="549" selection-end-line="549" />
+        <state relative-caret-position="442">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcss_stats/core/dcss_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcss_stats_gui/dcss_stats_gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="276" column="87" selection-start-line="276" selection-start-column="87" selection-end-line="276" selection-end-column="87" />
           <folding>
-            <element signature="e#1#16#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Tools/Python36/Lib/configparser.py">
+    <entry file="file://$PROJECT_DIR$/dcss_stats/game_stats.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="1051" column="71" selection-start-line="1051" selection-start-column="71" selection-end-line="1051" selection-end-column="71" />
+        <state relative-caret-position="454">
+          <caret line="456" lean-forward="true" selection-start-line="456" selection-end-line="456" />
+          <folding>
+            <element signature="e#1#16#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

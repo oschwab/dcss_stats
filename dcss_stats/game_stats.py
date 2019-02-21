@@ -8,7 +8,7 @@ from os.path import isfile, join, exists
 from dcss_stats.core.dcss_data import get_short_background, get_short_specie
 from dcss_stats.core.eventhook import EventHook
 from .core import logger,utils
-
+import statistics
 
 
 class StatColumn(Enum):
@@ -253,11 +253,25 @@ class GameStats:
             stat = self.Stats
 
         filtstat = []
-        for s in self.Stats:
+        for s in stat:
             sb = s[StatColumn.species] + ' ' + s[StatColumn.background]
             if sb == character:
                 filtstat.append(s)
         return filtstat
+
+    def get_wins(self, stat=None):
+        """
+        returns a stat structure filtered for character
+        :param character: the character (race+job) to filter
+        :return: stat structure
+        """
+        if stat is None:
+            stat = self.Stats
+        wins=0
+        for s in stat:
+            if  s[StatColumn.escaped]:
+                wins = wins + 1
+        return wins
 
     def get_filtered_stat(self, stat,value,column=StatColumn.dungeon_level ):
         """
@@ -303,9 +317,11 @@ class GameStats:
     def get_average_score(self,stat=None):
         if stat is None:
             stat = self.Stats
+        if len(stat)==0 :
+            return 0
         avg=0
         scores = [c[StatColumn.score] for c in stat]
-        return (sum(scores) / float(len(scores)))
+        return (round((sum(scores) / float(len(scores)))))
 
 
 
@@ -420,7 +436,8 @@ i       From the stat structure in param , get the count of each possible value 
 
         return(ttpt)
 
-    def get_averagescore(self, stat=None):
+
+    def get_median_score(self, stat=None):
         """
         returns the average score
         :param stat: the stat structure ; if None global one is taken
@@ -429,11 +446,15 @@ i       From the stat structure in param , get the count of each possible value 
         if stat is None:
             stat = self.Stats
         avg = 0.0
+
         if len(stat) == 0:
             return 0
-        for s in stat:
-            avg = avg + s[StatColumn.score]
-        return int(avg / len(stat))
+
+        score = []
+        for st in stat:
+            score.append(st[StatColumn.score])
+        return round(statistics.median(score))
+
 
     def get_scoreevolution(self,type='month',stat=None):
         if stat is None:

@@ -2,6 +2,7 @@ import csv
 import os
 
 from dcss_stats.core.dcss_data import jobs,species,get_short_specie,get_short_background
+from dcss_stats.morgue_downloader import DCSSDownloader,Server
 from pathlib import Path
 import pygubu
 from dcss_stats.game_stats import StatColumn,GameStats
@@ -9,7 +10,7 @@ from dcss_stats.core import logger,config,utils
 from dcss_stats import __version__
 import datetime
 import leather
-import mmap
+
 
 
 try:
@@ -106,7 +107,7 @@ class Application:
 
         for col in colnames:
             tv.heading(col, text=col, command=lambda _col=col: \
-                self.treeview_sort_column(tv, _col, False))
+                self.treeview_sort_column(tv, _col, False,self.numeric_cols))
             tv.column(col, anchor='w', width=100)
 
         tv.column('#0',width=35)
@@ -125,8 +126,13 @@ class Application:
         # Char stats treeview
         #
         tv_char = self.builder.get_object('tvChar', self.mainwindow)
-        tv_char['columns'] = ('Character','Games','Wins','Avg score')
+        tv_char['columns'] = ('Games','Wins','Avg score','Median Score')
+        for col in tv_char['columns']:
+            tv_char.heading(col, text=col, command=lambda _col=col: \
+                self.treeview_sort_column(tv_char, _col, False,tv_char['columns']))
+            tv_char.column(col, anchor='w', width=100)
 
+        tv_char.column('#0',width=10)
 
         #
         # Filter
@@ -267,7 +273,8 @@ class Application:
 
         tv_stats.delete(*tv_stats.get_children())
         tv_stats.insert('', 'end', text='Number of games:', values=(len(self.current_stat),))
-        tv_stats.insert('', 'end', text='Average score:', values=(self.game_stats.get_averagescore(self.current_stat),))
+        tv_stats.insert('', 'end', text='Average score:', values=(self.game_stats.get_average_score(self.current_stat),))
+        tv_stats.insert('', 'end', text='Median score:', values=(self.game_stats.get_median_score(self.current_stat),))
         total_play_time =  str(datetime.timedelta(seconds=self.game_stats.get_playtime(self.current_stat)))
         tv_stats.insert('', 'end', text='Total play time', values=(total_play_time,))
         pc_total=(len(self.current_stat)  * 100) / self.great_total
@@ -284,8 +291,12 @@ class Application:
             short_char= get_short_specie(char[0]) + get_short_background(char[1])
             char_stat = self.game_stats.get_char_filtered_stat(char[1],char[0], stat=self.current_stat)
             sb = len(char_stat)
+            wins = self.game_stats.get_wins(stat=char_stat)
+            avg = self.game_stats.get_average_score(stat=char_stat)
+            med = self.game_stats.get_median_score(stat=char_stat)
+            #('Character', 'Games', 'Wins', 'Avg score', 'Median Score')
 
-            tv_char.insert('', 'end', text=str(short_char), values=(sb,))
+            tv_char.insert('', 'end', text=str(short_char), values=(sb,wins,avg,med))
 
 
 
@@ -468,9 +479,9 @@ class Application:
         os.system(filename)
 
 
-    def treeview_sort_column(self,tv, col, reverse):
+    def treeview_sort_column(self,tv, col, reverse,num_cols):
 
-        numeric_cols_lbl = list(str(c) for c in self.numeric_cols)
+        numeric_cols_lbl = list(str(c) for c in num_cols)
         if (col in numeric_cols_lbl):
             l = [(int(tv.set(k, col)), k) for k in tv.get_children('')]
         else:
@@ -484,7 +495,7 @@ class Application:
 
         # reverse sort next time
         tv.heading(col, command=lambda: \
-                   self.treeview_sort_column(tv, col, not reverse))
+                   self.treeview_sort_column(tv, col, not reverse,num_cols))
 
 
 def set_enabled(childList, enabled):
