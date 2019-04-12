@@ -32,6 +32,7 @@ class StatColumn(Enum):
     filename = auto()
     version = auto()
     endgame_cause = auto()
+    poisoned = auto()
     self_kill = auto()
     dungeon_level = auto()
     score = auto()
@@ -61,15 +62,15 @@ class StatColumn(Enum):
            self.version: 'Version',
            self.endgame_cause: 'Endgame cause',
            self.self_kill: 'Self kill',
-           self.dungeon_level: 'Dungeon level',
+           self.dungeon_level: 'Branch level',
            self.score: 'Score',
            self.escaped: 'Escaped',
            self.orb: 'Orb',
            self.runes: 'Runes',
            self.row_number: '#',
            self.game_id: 'Game number',
-           self.game_rank: 'Overall rank'
-
+           self.game_rank: 'Overall rank',
+           self.poisoned: 'Poisoned'
                    }
        if self in labels.keys():
            return(labels[self])
@@ -690,10 +691,18 @@ i       From the stat structure in param , get the count of each possible value 
 
         # Check if we must rectify monster effect
         quote = stat[StatColumn.endgame_cause].find("'")
+        stat[StatColumn.poisoned] = ""
         if  quote > 0 :
             # stupid creature's poison
             # cacas' flame
+            effect=stat[StatColumn.endgame_cause][quote+3:]
             stat[StatColumn.endgame_cause] = stat[StatColumn.endgame_cause][:quote]
+            # can be  poison or ghost's poison
+            if ((len(effect) >=6) and (effect[-6:]=='poison')):
+                stat[StatColumn.poisoned] = "Y"
+
+
+
         thrown = stat[StatColumn.endgame_cause].find("thrown")
         if  thrown > 0 :
             # stone thrown by a kobold

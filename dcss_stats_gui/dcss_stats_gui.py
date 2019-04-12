@@ -111,7 +111,7 @@ class Application:
             tv.column(col, anchor='w', width=100)
 
         tv.column('#0',width=35)
-
+        tv.bind("<<TreeviewSelect>>", self.on_tv_select,"+")
 
         tv.tag_configure('escaped', background='green')
         tv.bind("<Double-1>", self.on_tv_doubleclick)
@@ -163,8 +163,6 @@ class Application:
         btnSettings= self.builder.get_object('cmdSettings', master)
         btnSettings.bind("<Button-1>", self.show_config_dialog)
 
-        btnMatrix= self.builder.get_object('cmdMatrix', master)
-        btnMatrix.bind("<Button-1>", self.show_matrix_view)
 
         #
         # Main window
@@ -264,6 +262,9 @@ class Application:
 
 
     def display_data(self):
+        lblSelCount = self.builder.get_object('lblSelCount', self.mainwindow)
+        lblSelCount.configure(text='')
+
         self.fill_treeview()
         self.fill_stats()
         self.fill_char_stats()
@@ -308,7 +309,12 @@ class Application:
         filename=item['values'][StatColumn.filename._value_ - 1]
         utils.open_morguefile(config,filename)
 
-
+    def on_tv_select(self,event):
+        tv = self.builder.get_object('tv', self.master)
+        sel = tv.selection()
+        lblSelCount = self.builder.get_object('lblSelCount', self.mainwindow)
+        lblSelCount.configure(text= str(len(sel))+' games selected')
+        pass
 
     def show_config_dialog(self,event):
         if self.config_dialog is None:
