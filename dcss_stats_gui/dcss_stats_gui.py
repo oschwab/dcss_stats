@@ -1,6 +1,8 @@
+import sys
+print(sys.path)
+
 import csv
 import os
-
 from dcss_stats.core.dcss_data import jobs,species,get_short_specie,get_short_background
 from dcss_stats.morgue_downloader import DCSSDownloader,Server
 from pathlib import Path
@@ -10,8 +12,6 @@ from dcss_stats.core import logger,config,utils
 from dcss_stats import __version__
 import datetime
 import leather
-
-
 
 try:
     import tkinter as tk

@@ -13,21 +13,21 @@ import statistics
 
 class StatColumn(Enum):
     row_number=0
-    dungeon = auto()
-    game_rank = auto()
-    game_id=auto()
-    background = auto()
     species = auto()
+    background = auto()
+    god = auto()
+    game_rank = auto()
+    dungeon = auto()
+    dun_lev = auto()
+    game_id=auto()
     datestart= auto()
     datedeath=auto()
     char_name = auto()
     hp = auto()
     surname = auto()
     duration = auto()
-    dun_lev = auto()
     xp_level = auto()
     turns = auto()
-    god = auto()
     religion_rank = auto()
     filename = auto()
     version = auto()
@@ -270,7 +270,7 @@ class GameStats:
             stat = self.Stats
         wins=0
         for s in stat:
-            if  s[StatColumn.escaped]:
+            if ( s[StatColumn.escaped] and (s[StatColumn.orb])) :
                 wins = wins + 1
         return wins
 
@@ -281,7 +281,6 @@ class GameStats:
         :param value:  the value of the column
         :return: stat structure
         """
-
         if stat is None:
             stat = self.Stats
 
@@ -296,7 +295,6 @@ class GameStats:
 
     def get_char_filtered_stat(self, background,species,stat=None):
         """
-
         :param stat:
         :param value:
         :param background:
@@ -631,6 +629,12 @@ i       From the stat structure in param , get the count of each possible value 
             else:
                 stat[StatColumn.endgame_cause] = ' '.join(linetab[3:])
 
+        elif morgue[line + 1].strip().startswith("... caused"):
+            linetab = morgue[line + 1].strip().split(' ')
+            if linetab[3] in ["a","an"]:
+                stat[StatColumn.endgame_cause] = ' '.join(linetab[4:])
+            else:
+                stat[StatColumn.endgame_cause] = ' '.join(linetab[3:])
         elif curline.strip().lower().startswith('escaped'):
             stat[StatColumn.endgame_cause] = 'Escaped'
             stat[StatColumn.escaped] = True
@@ -663,8 +667,10 @@ i       From the stat structure in param , get the count of each possible value 
             if linetab[0]== "blown":
                 del linetab[1]
             if linetab[1] == "with"  :
-                while linetab[1] != "by":
-                    del linetab[1]
+                if curline.find(" by ") > 0:
+                    while (linetab[1] != "by"):
+                        del linetab[1]
+
 
             if linetab[0].lower()=='quit':
                 stat[StatColumn.endgame_cause] = 'Quit'
