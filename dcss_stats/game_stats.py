@@ -29,6 +29,7 @@ class StatColumn(Enum):
     xp_level = auto()
     turns = auto()
     religion_rank = auto()
+    piety = auto ()
     filename = auto()
     version = auto()
     endgame_cause = auto()
@@ -70,7 +71,8 @@ class StatColumn(Enum):
            self.row_number: '#',
            self.game_id: 'Game number',
            self.game_rank: 'Overall rank',
-           self.poisoned: 'Poisoned'
+           self.poisoned: 'Poisoned',
+           self.piety: 'Piety'
                    }
        if self in labels.keys():
            return(labels[self])
@@ -565,6 +567,11 @@ i       From the stat structure in param , get the count of each possible value 
         line = line + 1
         curline = morgue[line]
         linetab = curline.strip().split(' ')
+        if (linetab[4] == 'Draconian'):
+            color=linetab[3]
+            linetab.remove(color)
+            #TODO manage draconian color
+
         stat[StatColumn.species] = linetab[3]
         idx_on = 5
         if stat[StatColumn.species] in ["High","Dark","Deep","Hill","Vine"]:
@@ -576,15 +583,12 @@ i       From the stat structure in param , get the count of each possible value 
                 # ... Elementalist
                 stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[6]
                 idx_on = idx_on + 1
+
+
         else:
             stat[StatColumn.background] = linetab[4]
         if linetab[idx_on] != "on":
             stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[idx_on]
-
-
-
-        # if len(linetab) > 9 and stat[StatColumn.background] != linetab[5] :
-        #      stat[StatColumn.background] = stat[StatColumn.background] + ' ' + linetab[5]
 
 
 
@@ -690,6 +694,7 @@ i       From the stat structure in param , get the count of each possible value 
                     stat[StatColumn.self_kill] = True
                 else:
                     stat[StatColumn.self_kill] = False
+                    stat[StatColumn.endgame_cause] =''
 
                 if stat[StatColumn.endgame_cause].find('\'s ghost') > -1:
                     stat[StatColumn.endgame_cause] = "Player" + stat[StatColumn.endgame_cause][
@@ -725,7 +730,6 @@ i       From the stat structure in param , get the count of each possible value 
 
 
 
-
         #
         # Dungeon & Level
         #
@@ -755,6 +759,8 @@ i       From the stat structure in param , get the count of each possible value 
                     stat[StatColumn.dungeon] = ' ' .join(linetab [5:])
 
             else:
+
+
                 if len(linetab) > 4:
                     if linetab[3]=="ice":
                     # in an ice cave
@@ -775,9 +781,22 @@ i       From the stat structure in param , get the count of each possible value 
                     elif linetab[6] == "realm":
                         stat[StatColumn.dungeon_level] = linetab[3]
                         stat[StatColumn.dungeon] = "zot"
+                    elif linetab[3] == "gauntlet":
+                        stat[StatColumn.dungeon_level] = "n/a"
+                        stat[StatColumn.dungeon] = linetab[3]
+                    elif linetab[3] == "bailey":
+                        stat[StatColumn.dungeon_level] = "n/a"
+                        stat[StatColumn.dungeon] = linetab[3]
+                    elif linetab[3] == "sewer":
+                        stat[StatColumn.dungeon_level] = "n/a"
+                        stat[StatColumn.dungeon] = linetab[3]
+                    elif linetab[3] == "ossuary":
+                        stat[StatColumn.dungeon_level] = "n/a"
+                        stat[StatColumn.dungeon] = linetab[3]
+
                     else:
-                        stat[StatColumn.dungeon_level] = linetab[3]
-                        stat[StatColumn.dungeon] = linetab[6]
+                            stat[StatColumn.dungeon_level] = linetab[3]
+                            stat[StatColumn.dungeon] = linetab[6]
                 else:
                     stat[StatColumn.dungeon] = linetab[3]
                     stat[StatColumn.dungeon_level] = 'n/a'
@@ -792,6 +811,8 @@ i       From the stat structure in param , get the count of each possible value 
         stat[StatColumn.dun_lev] = stat[StatColumn.dungeon]
         if stat[StatColumn.dungeon_level]!="n/a":
             stat[StatColumn.dun_lev] = stat[StatColumn.dun_lev] +":" + stat[StatColumn.dungeon_level]
+
+
         # Game duration
         line = 4
         eof=False
@@ -806,8 +827,19 @@ i       From the stat structure in param , get the count of each possible value 
             stat[StatColumn.duration] = linetab[3]
             stat[StatColumn.turns] = linetab[4][1:]
 
+            # Piety
+            while not (morgue[line].strip().startswith('Magic:') or morgue[line].strip().startswith('MP:')):
+                line = line + 1
 
-            # runes
+            pos = morgue[line].find("[")
+            if (pos > 0):
+                stat[StatColumn.piety] = morgue[line][pos+1:morgue[line].find("]")].replace('.','')
+            else:
+                stat[StatColumn.piety] =''
+
+
+
+                # runes
             while not morgue[line].strip().startswith('}:'):
                 line = line + 1
                 if (line == len(morgue)):

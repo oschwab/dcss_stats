@@ -5,3 +5,4 @@
 PyYAML>=3.11
 leather
 Pillow >=2
+pygubu

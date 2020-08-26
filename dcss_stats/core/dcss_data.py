@@ -46,20 +46,21 @@ species={
 "Deep Elf": "DE",
 "Demigod": "Dg",
 "Draconian": "Dr",
-"Red Draconian": "Dr",
-"White Draconian": "Dr",
-"Green Draconian": "Dr",
-"Yellow Draconian": "Dr",
-"Grey Draconian": "Dr",
-"Black Draconian": "Dr",
-"Purple Draconian": "Dr",
-"Mottled Draconian": "Dr",
-"Pale Draconian": "Dr",
+# "Red Draconian": "Dr",
+# "White Draconian": "Dr",
+# "Green Draconian": "Dr",
+# "Yellow Draconian": "Dr",
+# "Grey Draconian": "Dr",
+# "Black Draconian": "Dr",
+# "Purple Draconian": "Dr",
+# "Mottled Draconian": "Dr",
+# "Pale Draconian": "Dr",
 "Demonspawn": "Ds",
 "Felid": "Fe",
 "Formicid": "Fo",
 "Ghoul": "Gh",
 "Gargoyle": "Gr",
+"Gnoll": "Gn",
 "Halfling": "Ha",
 "High Elf": "HE",
 "Hill Orc": "HO",
@@ -145,5 +146,6 @@ def validate_class_background(string):
         return (is_background(string) or is_specie(string))
     if (len(string)==4):
         return ( (is_background(string[:2]) or is_specie(string[:2])) and (is_background(string[2:]) or is_specie(string[2:])))
+
 
 

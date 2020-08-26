@@ -36,7 +36,7 @@ class Server(Enum):
         return labels[self]
 
     def get_morgue(self):
-        if (self==self.CKO):
+        if (self in [self.CKO,self.CUE,self.CXC]):
             return "crawl/morgue"
         else:
             return "morgue"
@@ -80,7 +80,7 @@ class DCSSDownloader:
                 os.mkdir(self.morgue_repo)
 
             url = "https://" + server_enum.to_address() + "/"+ server_enum.get_morgue()  +"/" + user + "/"
-            print("URL=" + url)
+            print("Connecting to server "+ str(server_enum) +". URL=" + url)
             response = urllib.request.urlopen(url)
             data = response.read()
             text = data.decode('utf-8')

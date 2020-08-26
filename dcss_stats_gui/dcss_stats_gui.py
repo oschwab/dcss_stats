@@ -163,13 +163,10 @@ class Application:
         btnSettings= self.builder.get_object('cmdSettings', master)
         btnSettings.bind("<Button-1>", self.show_config_dialog)
 
-
         #
         # Main window
         #
         self.mainwindow.bind("<Map>",self.mainwindow_activate)
-
-
 
     def on_btnfilter_click(self):
         self.apply_filter()
