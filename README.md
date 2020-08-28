@@ -27,7 +27,7 @@ morgue_repository = C:\Users\username\dcss_stats\morgue
 
 offline_morgue_path = K:\username\MorgueDCSS
 
-logging = DEBU
+logging = DEBUG
 
 servers = {'CKO':'username','CPO':'username','CUE':'username','CXC':'username'}`
 
