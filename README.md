@@ -19,6 +19,19 @@ An utility to get statistics on [Dungeon Crawl Stone Soup ](http://crawl.develz.
 WORK IN PROGRESS
 
 
+Example configuration file :
+
+[settings]
+
+morgue_repository = C:\Users\username\dcss_stats\morgue
+
+offline_morgue_path = K:\username\MorgueDCSS
+
+logging = DEBU
+
+servers = {'CKO':'username','CPO':'username','CUE':'username','CXC':'username'}`
+
+
 ## Command line interface
 
 `python dcss_stats_cli\dcss_stats_cli.py`
